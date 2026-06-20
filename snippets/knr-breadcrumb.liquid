@@ -1,23 +1,5 @@
-{%- assign _show_home = null -%}
-{%- assign _home_label = null -%}
 {%- assign _show_collection = null -%}
 {%- assign _separator = null -%}
-
-{%- if show_home != null -%}
-  {%- assign _show_home = show_home -%}
-{%- elsif section and section.settings and section.settings.show_home != null -%}
-  {%- assign _show_home = section.settings.show_home -%}
-{%- else -%}
-  {%- assign _show_home = true -%}
-{%- endif -%}
-
-{%- if home_label != null -%}
-  {%- assign _home_label = home_label -%}
-{%- elsif section and section.settings and section.settings.home_label != null -%}
-  {%- assign _home_label = section.settings.home_label -%}
-{%- else -%}
-  {%- assign _home_label = 'Accueil' -%}
-{%- endif -%}
 
 {%- if show_collection != null -%}
   {%- assign _show_collection = show_collection -%}
@@ -35,29 +17,87 @@
   {%- assign _separator = '›' -%}
 {%- endif -%}
 
+{%- comment -%}
+  Determine which collection to display when product belongs to multiple collections. Priority:
+  1) collection variable (current collection page)
+  2) product.collections item with metafield collection_ino.main_level == true
+  3) product.collections item with lowest collection_ino.level (integer)
+{%- endcomment -%}
+
+{%- assign chosen_collection = collection -%}
+
+{%- comment -%}
+  If we're on a product page and no collection variable is present,
+  build the breadcrumb from product.collections ordered by level (0..3).
+  Use metafield collection_ino.main_level to prioritize if present.
+{%- endcomment -%}
+
+{%- if product and chosen_collection == null -%}
+  {%- assign chosen_collection = null -%}
+  {%- assign rendered_ids = '' -%}
+
+  {%- comment -%}
+    First try to find a collection explicitly marked main_level
+  {%- endcomment -%}
+  {%- for col in product.collections -%}
+    {%- assign ml_field = null -%}
+    {%- if col.metafields and col.metafields.collection_ino and col.metafields.collection_ino.main_level != null -%}
+      {%- assign ml_field = col.metafields.collection_ino.main_level -%}
+    {%- endif -%}
+    {%- assign ml = false -%}
+    {%- if ml_field != null -%}
+      {%- if ml_field.value != null -%}
+        {%- assign ml_val = ml_field.value -%}
+      {%- else -%}
+        {%- assign ml_val = ml_field -%}
+      {%- endif -%}
+      {%- if ml_val == true or ml_val == 'true' or ml_val == '1' or ml_val == 1 -%}
+        {%- assign ml = true -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- if ml -%}
+      {%- assign chosen_collection = col -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- comment -%}
+  Build output by level ascending (0..3) to render full hierarchy
+{%- endcomment -%}
+{%- assign max_level = 3 -%}
 <nav class="knr-breadcrumb" aria-label="{{ 'general.breadcrumbs' | t }}">
   <ol class="knr-breadcrumb__list">
-    {% if _show_home %}
-      <li class="knr-breadcrumb__item">
-        <a class="knr-breadcrumb__link" href="{{ routes.root_url }}">{{ _home_label }}</a>
-      </li>
-    {% endif %}
-
-    {% assign current_collection = collection %}
-    {% if current_collection == null and product %}
-      {% assign current_collection = product.collections.first %}
-    {% endif %}
-
-    {% if current_collection and _show_collection %}
-      <li class="knr-breadcrumb__sep" aria-hidden="true">{{ _separator }}</li>
-      <li class="knr-breadcrumb__item">
-        <a class="knr-breadcrumb__link" href="{{ current_collection.url }}">{{ current_collection.title }}</a>
-      </li>
-    {% endif %}
-
-    {% if product %}
-      <li class="knr-breadcrumb__sep" aria-hidden="true">{{ _separator }}</li>
-      <li class="knr-breadcrumb__item knr-breadcrumb__current" aria-current="page">{{ product.title }}</li>
-    {% endif %}
+    {%- for lvl_index in (0..max_level) -%}
+      {%- for col in product.collections -%}
+        {%- comment -%}
+          skip if already rendered or it's the chosen_collection we will also include by level matching
+        {%- endcomment -%}
+        {%- assign key = '|' | append: col.id | append: '|' -%}
+        {%- if rendered_ids contains key -%}
+          {%- assign already = true -%}
+        {%- else -%}
+          {%- assign already = false -%}
+        {%- endif -%}
+        {%- assign lvl = 9999 -%}
+        {%- if col.metafields and col.metafields.collection_ino and col.metafields.collection_ino.level != null -%}
+          {%- assign lvl_field = col.metafields.collection_ino.level -%}
+          {%- if lvl_field.value != null -%}
+            {%- assign lvl = lvl_field.value | plus: 0 -%}
+          {%- else -%}
+            {%- assign lvl = lvl_field | plus: 0 -%}
+          {%- endif -%}
+        {%- endif -%}
+        {%- if lvl == lvl_index and already == false -%}
+          {%- if rendered_ids != '' -%}
+            <li class="knr-breadcrumb__sep" aria-hidden="true">{{ _separator }}</li>
+          {%- endif -%}
+          <li class="knr-breadcrumb__item">
+            <a class="knr-breadcrumb__link" href="{{ col.url }}">{{ col.title }}</a>
+          </li>
+          {%- assign rendered_ids = rendered_ids | append: '|' | append: col.id | append: '|' -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endfor -%}
   </ol>
 </nav>
