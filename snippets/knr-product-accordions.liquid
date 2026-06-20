@@ -1,0 +1,142 @@
+{%- comment -%}
+  Snippet: knr-product-accordions
+  Renders product accordions from product.metafields.product_info:
+    - detailed_description (Titre: Description détaillée)
+    - benefits (Titre: Bienfaits)
+    - key_ingredients (Titre: Ingrédients clés)
+    - skin_types (Titre: Adapté aux peaux)
+  Usage: {% render 'knr-product-accordions', block: block %}
+{%- endcomment -%}
+
+{%- assign detailed_description = null -%}
+{%- assign benefits = null -%}
+{%- assign key_ingredients = null -%}
+{%- assign skin_types = null -%}
+
+{%- if product and product.metafields and product.metafields.product_info != null -%}
+  {%- assign detailed_description = product.metafields.product_info.detailed_description -%}
+  {%- assign benefits = product.metafields.product_info.benefits -%}
+  {%- assign key_ingredients = product.metafields.product_info.key_ingredients -%}
+  {%- assign skin_types = product.metafields.product_info.skin_types -%}
+{%- endif -%}
+
+{%- if detailed_description != blank or benefits != blank or key_ingredients != blank or skin_types != blank -%}
+  <div
+    class="knr-product-accordions"
+    {% if block and block.shopify_attributes %}
+      {{- block.shopify_attributes -}}
+    {% endif %}
+  >
+    {%- if detailed_description != blank -%}
+      <details class="knr-product-accordion" open>
+        <summary class="knr-product-accordion__summary">
+          <span>Description détaillée</span>
+          <span class="knr-product-accordion__icon">⌄</span>
+        </summary>
+        <div class="knr-product-accordion__content">
+          {{ detailed_description | metafield_tag }}
+        </div>
+      </details>
+    {%- endif -%}
+
+    {%- if benefits != blank -%}
+      <details class="knr-product-accordion">
+        <summary class="knr-product-accordion__summary">
+          <span>Bienfaits</span>
+          <span class="knr-product-accordion__icon">⌄</span>
+        </summary>
+        <div class="knr-product-accordion__content">
+          {{ benefits | metafield_tag }}
+        </div>
+      </details>
+    {%- endif -%}
+
+    {%- if key_ingredients != blank -%}
+      <details class="knr-product-accordion">
+        <summary class="knr-product-accordion__summary">
+          <span>Ingrédients clés</span>
+          <span class="knr-product-accordion__icon">⌄</span>
+        </summary>
+        <div class="knr-product-accordion__content">
+          {{ key_ingredients | metafield_tag }}
+        </div>
+      </details>
+    {%- endif -%}
+
+    {%- if skin_types != blank -%}
+      <details class="knr-product-accordion">
+        <summary class="knr-product-accordion__summary">
+          <span>Adapté aux peaux</span>
+          <span class="knr-product-accordion__icon">⌄</span>
+        </summary>
+        <div class="knr-product-accordion__content">
+          {{ skin_types | metafield_tag }}
+        </div>
+      </details>
+    {%- endif -%}
+  </div>
+
+  <style>
+    .knr-product-accordions {
+      border-top: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .knr-product-accordion {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .knr-product-accordion__summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 0;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .knr-product-accordion__summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .knr-product-accordion__content {
+      padding-bottom: 24px;
+    }
+
+    .knr-product-accordion[open] .knr-product-accordion__icon {
+      transform: rotate(180deg);
+    }
+
+    .knr-product-accordion__icon {
+      transition: transform 0.2s ease;
+    }
+  </style>
+  <script>
+    (function () {
+      function initContainer(container) {
+        if (!container || container.dataset.knrAccordionInit === '1') return;
+        container.dataset.knrAccordionInit = '1';
+        container.addEventListener(
+          'toggle',
+          function (event) {
+            var opened = event.target && event.target.nodeName === 'DETAILS' && event.target.open;
+            if (!opened) return;
+            var details = container.querySelectorAll('details');
+            details.forEach(function (d) {
+              if (d !== event.target) d.open = false;
+            });
+          },
+          true
+        );
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () {
+          document.querySelectorAll('.knr-product-accordions').forEach(initContainer);
+        });
+      } else {
+        document.querySelectorAll('.knr-product-accordions').forEach(initContainer);
+      }
+    })();
+  </script>
+{%- endif -%}
