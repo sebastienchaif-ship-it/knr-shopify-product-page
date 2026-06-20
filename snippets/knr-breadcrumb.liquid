@@ -1,5 +1,22 @@
+{%- assign _show_home = null -%}
 {%- assign _show_collection = null -%}
 {%- assign _separator = null -%}
+
+{%- if show_home != null -%}
+  {%- assign _show_home = show_home -%}
+{%- elsif section and section.settings and section.settings.show_home != null -%}
+  {%- assign _show_home = section.settings.show_home -%}
+{%- else -%}
+  {%- assign _show_home = true -%}
+{%- endif -%}
+
+{%- if home_label != null -%}
+  {%- assign _home_label = home_label -%}
+{%- elsif section and section.settings and section.settings.home_label != null -%}
+  {%- assign _home_label = section.settings.home_label -%}
+{%- else -%}
+  {%- assign _home_label = 'Accueil' -%}
+{%- endif -%}
 
 {%- if show_collection != null -%}
   {%- assign _show_collection = show_collection -%}
@@ -68,6 +85,13 @@
 {%- assign max_level = 3 -%}
 <nav class="knr-breadcrumb" aria-label="{{ 'general.breadcrumbs' | t }}">
   <ol class="knr-breadcrumb__list">
+    {% if _show_home %}
+      <li class="knr-breadcrumb__item">
+        <a class="knr-breadcrumb__link" href="{{ routes.root_url }}">{{ _home_label }}</a>
+      </li>
+      <li class="knr-breadcrumb__sep" aria-hidden="true">{{ _separator }}</li>
+    {% endif %}
+
     {%- for lvl_index in (0..max_level) -%}
       {%- for col in product.collections -%}
         {%- comment -%}

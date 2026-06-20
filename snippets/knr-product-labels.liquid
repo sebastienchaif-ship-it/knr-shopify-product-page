@@ -1,0 +1,52 @@
+{%- comment -%}
+  Snippet: knr-product-labels
+  Renders product labels stored in metafield `product_info.product_labels` as a block.
+  Usage: {% render 'knr-product-labels', block: block %}
+{%- endcomment -%}
+
+{%- assign labels_field = null -%}
+{%- if product
+  and product.metafields
+  and product.metafields.product_info
+  and product.metafields.product_info.product_labels != null
+-%}
+  {%- assign labels_field = product.metafields.product_info.product_labels -%}
+{%- endif -%}
+
+{%- if labels_field != null -%}
+  {%- if labels_field.value != null -%}
+    {%- assign labels = labels_field.value -%}
+  {%- else -%}
+    {%- assign labels = labels_field -%}
+  {%- endif -%}
+{%- else -%}
+  {%- assign labels = null -%}
+{%- endif -%}
+
+{%- if labels != blank -%}
+  <div
+    class="knr-product-labels"
+    {% if block and block.shopify_attributes %}
+      {{- block.shopify_attributes -}}
+    {% endif %}
+  >
+    {% for label in labels %}
+      <span class="knr-product-label">{{ label }}</span>
+    {% endfor %}
+  </div>
+
+  <style>
+    .knr-product-labels {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .knr-product-label {
+      border: 1px solid currentColor;
+      padding: 3px 7px;
+      font-size: 12px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+  </style>
+{%- endif -%}
