@@ -25,6 +25,8 @@
     {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
 
+  {{ 'knr-breadcrumb.css' | asset_url | stylesheet_tag }}
+
   {%- style -%}
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -105,6 +107,15 @@
                         {{ product.title | escape }}
                       </h2>
                     </a>
+                  </div>
+                {%- when 'knr_breadcrumb' -%}
+                  <div {{ block.shopify_attributes }}>
+                    {% render 'knr-breadcrumb',
+                      show_home: block.settings.show_home,
+                      home_label: block.settings.home_label,
+                      show_collection: block.settings.show_collection,
+                      separator: block.settings.separator
+                    %}
                   </div>
                 {%- when 'price' -%}
                   <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
@@ -798,6 +809,37 @@
       "type": "title",
       "name": "t:sections.main-product.blocks.title.name",
       "limit": 1
+    },
+    {
+      "type": "knr_breadcrumb",
+      "name": "knr - Breadcrumb",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_home",
+          "label": "Afficher lien Accueil",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "home_label",
+          "label": "Texte du lien Accueil",
+          "default": "Accueil"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_collection",
+          "label": "Afficher la collection (si disponible)",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "separator",
+          "label": "Séparateur",
+          "default": "›"
+        }
+      ]
     },
     {
       "type": "price",

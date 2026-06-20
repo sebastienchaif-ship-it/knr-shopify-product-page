@@ -1,0 +1,24 @@
+.knr-breadcrumb {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.knr-breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: .9375rem;
+}
+
+.knr-breadcrumb__link {
+  color: var(--color-foreground, #111);
+  text-decoration: none;
+  opacity: .85;
+}
+
+.knr-breadcrumb__current {
+  font-weight: 600;
+}

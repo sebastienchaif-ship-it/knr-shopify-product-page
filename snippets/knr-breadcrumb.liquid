@@ -1,0 +1,63 @@
+{%- assign _show_home = null -%}
+{%- assign _home_label = null -%}
+{%- assign _show_collection = null -%}
+{%- assign _separator = null -%}
+
+{%- if show_home != null -%}
+  {%- assign _show_home = show_home -%}
+{%- elsif section and section.settings and section.settings.show_home != null -%}
+  {%- assign _show_home = section.settings.show_home -%}
+{%- else -%}
+  {%- assign _show_home = true -%}
+{%- endif -%}
+
+{%- if home_label != null -%}
+  {%- assign _home_label = home_label -%}
+{%- elsif section and section.settings and section.settings.home_label != null -%}
+  {%- assign _home_label = section.settings.home_label -%}
+{%- else -%}
+  {%- assign _home_label = 'Accueil' -%}
+{%- endif -%}
+
+{%- if show_collection != null -%}
+  {%- assign _show_collection = show_collection -%}
+{%- elsif section and section.settings and section.settings.show_collection != null -%}
+  {%- assign _show_collection = section.settings.show_collection -%}
+{%- else -%}
+  {%- assign _show_collection = true -%}
+{%- endif -%}
+
+{%- if separator != null -%}
+  {%- assign _separator = separator -%}
+{%- elsif section and section.settings and section.settings.separator != null -%}
+  {%- assign _separator = section.settings.separator -%}
+{%- else -%}
+  {%- assign _separator = '›' -%}
+{%- endif -%}
+
+<nav class="knr-breadcrumb" aria-label="{{ 'general.breadcrumbs' | t }}">
+  <ol class="knr-breadcrumb__list">
+    {% if _show_home %}
+      <li class="knr-breadcrumb__item">
+        <a class="knr-breadcrumb__link" href="{{ routes.root_url }}">{{ _home_label }}</a>
+      </li>
+    {% endif %}
+
+    {% assign current_collection = collection %}
+    {% if current_collection == null and product %}
+      {% assign current_collection = product.collections.first %}
+    {% endif %}
+
+    {% if current_collection and _show_collection %}
+      <li class="knr-breadcrumb__sep" aria-hidden="true">{{ _separator }}</li>
+      <li class="knr-breadcrumb__item">
+        <a class="knr-breadcrumb__link" href="{{ current_collection.url }}">{{ current_collection.title }}</a>
+      </li>
+    {% endif %}
+
+    {% if product %}
+      <li class="knr-breadcrumb__sep" aria-hidden="true">{{ _separator }}</li>
+      <li class="knr-breadcrumb__item knr-breadcrumb__current" aria-current="page">{{ product.title }}</li>
+    {% endif %}
+  </ol>
+</nav>
