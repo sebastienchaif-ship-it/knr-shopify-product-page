@@ -121,6 +121,10 @@
                   <div {{ block.shopify_attributes }}>
                     {% render 'knr-product-labels', block: block %}
                   </div>
+                {%- when 'knr_product_scores' -%}
+                  <div {{ block.shopify_attributes }}>
+                    {% render 'knr-product-scores', block: block %}
+                  </div>
                 {%- when 'price' -%}
                   <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                     {%- render 'price',
@@ -848,6 +852,11 @@
     {
       "type": "knr_product_labels",
       "name": "knr - Product Labels",
+      "limit": 1
+    },
+    {
+      "type": "knr_product_scores",
+      "name": "knr - Product Scores",
       "limit": 1
     },
     {

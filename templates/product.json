@@ -3,12 +3,18 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": {
-          "type": "text",
+        "knr_breadcrumb_J6FF9h": {
+          "type": "knr_breadcrumb",
           "settings": {
-            "text": "{{ product.metafields.product_info.product_labels | metafield_text }}",
-            "text_style": "uppercase"
+            "show_home": false,
+            "home_label": "Accueil",
+            "show_collection": true,
+            "separator": "\/"
           }
+        },
+        "knr_product_labels_z8KWiN": {
+          "type": "knr_product_labels",
+          "settings": {}
         },
         "title": {
           "type": "title",
@@ -53,7 +59,8 @@
         }
       },
       "block_order": [
-        "vendor",
+        "knr_breadcrumb_J6FF9h",
+        "knr_product_labels_z8KWiN",
         "title",
         "text_LYyQPt",
         "variant_picker",

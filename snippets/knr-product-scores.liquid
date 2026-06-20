@@ -1,0 +1,72 @@
+{%- comment -%}
+  Snippet: knr-product-scores
+  Renders Yuka and INCI Beauty scores from metafields under product_info.
+  Usage: {% render 'knr-product-scores', block: block %}
+{%- endcomment -%}
+
+{%- assign yuka_field = null -%}
+{%- assign inci_field = null -%}
+{%- if product and product.metafields and product.metafields.product_info != null -%}
+  {%- if product.metafields.product_info.yuka_score != null -%}
+    {%- assign yuka_field = product.metafields.product_info.yuka_score -%}
+  {%- endif -%}
+
+  {%- assign inci_field = product.metafields.product_info.inci_score -%}
+{%- endif -%}
+
+{%- if yuka_field != null -%}
+  {%- if yuka_field.value != null -%}
+    {%- assign yuka_score = yuka_field.value -%}
+  {%- else -%}
+    {%- assign yuka_score = yuka_field -%}
+  {%- endif -%}
+{%- else -%}
+  {%- assign yuka_score = null -%}
+{%- endif -%}
+
+{%- if inci_field != null -%}
+  {%- if inci_field.value != null -%}
+    {%- assign inci_score = inci_field.value -%}
+  {%- else -%}
+    {%- assign inci_score = inci_field -%}
+  {%- endif -%}
+{%- else -%}
+  {%- assign inci_score = null -%}
+{%- endif -%}
+
+{%- if yuka_score != blank or inci_score != blank -%}
+  <div
+    class="knr-product-scores"
+    {% if block and block.shopify_attributes %}
+      {{- block.shopify_attributes -}}
+    {% endif %}
+  >
+    {%- if yuka_score != blank -%}
+      <span class="knr-product-scores__item"><strong>Yuka</strong> {{ yuka_score }}/100</span>
+    {%- endif -%}
+
+    {%- if yuka_score != blank and inci_score != blank -%}
+      <span class="knr-product-scores__separator">•</span>
+    {%- endif -%}
+
+    {%- if inci_score != blank -%}
+      <span class="knr-product-scores__item"><strong>INCI Beauty</strong> {{ inci_score }}/20</span>
+    {%- endif -%}
+  </div>
+
+  <style>
+    .knr-product-scores {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .knr-product-scores__item strong {
+      font-weight: 700;
+    }
+    .knr-product-scores__separator {
+      font-weight: 700;
+    }
+  </style>
+{%- endif -%}
