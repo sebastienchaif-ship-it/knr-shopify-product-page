@@ -1,0 +1,171 @@
+{% comment %}
+  KNR statement section — single content area driven by section settings
+  Settings: background image, eyebrow, message, author, text position, text width,
+  min heights (desktop/mobile), overlay opacity, paddings
+{% endcomment %}
+{{ 'knr-statement.css' | asset_url | stylesheet_tag }}
+<section
+  id="knr-statement-{{ section.id }}"
+  class="knr-statement section-{{ section.id }}"
+  style="justify-content: {% if section.settings.vertical_position == 'top' %}flex-start{% elsif section.settings.vertical_position == 'middle' %}center{% else %}flex-end{% endif %}; color: {{ section.settings.text_color }};"
+>
+  <div class="knr-statement__overlay"></div>
+
+  <div class="page-width">
+    <div class="knr-statement__inner-row" style="display:flex; gap:40px; align-items: center;">
+      <div class="knr-statement__left" style="flex: 0 0 40%;">
+        {% if section.settings.title != blank %}
+          <p class="knr-statement__eyebrow">{{ section.settings.title }}</p>
+        {% endif %}
+      </div>
+
+      <div
+        class="knr-statement__right"
+        style="flex: 1 1 60%; text-align: {{ section.settings.text_position }}; max-width: {% if section.settings.text_width == 'narrow' %}480px{% elsif section.settings.text_width == 'medium' %}720px{% else %}100%{% endif %}; margin-left: auto;"
+      >
+        {% if section.settings.message != blank %}
+          <div class="knr-statement__message">{{ section.settings.message }}</div>
+        {% endif %}
+
+        {% if section.settings.author != blank %}
+          <div class="knr-statement__author">{{ section.settings.author }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {%- style -%}
+    .knr-statement {
+      position: relative;
+      overflow: hidden;
+    }
+    .knr-statement::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+    }
+    .knr-statement__overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1;
+    }
+    .knr-statement__inner-row {
+      position: relative;
+      z-index: 2;
+      color: inherit;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    .knr-statement__eyebrow {
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .knr-statement__message {
+      font-size: 20px;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .knr-statement__author {
+      font-weight: 700;
+    }
+  {%- endstyle -%}
+
+  <style>
+    #knr-statement-{{ section.id }} { padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; display:flex; flex-direction:column; }
+    #knr-statement-{{ section.id }}::before { {% if section.settings.background_image != blank %} background-image: url({{ section.settings.background_image | img_url: 'master' }}); {% else %} background: transparent; {% endif %} }
+    #knr-statement-{{ section.id }} .knr-statement__overlay { background: rgba(0,0,0, {{ section.settings.overlay_opacity | divided_by: 100.0 }}); }
+    #knr-statement-{{ section.id }} .knr-statement__inner-row { min-height: {{ section.settings.min_height_desktop }}px; }
+    @media (max-width: 749px) {
+      #knr-statement-{{ section.id }} .knr-statement__inner-row { min-height: {{ section.settings.min_height_mobile }}px; }
+    }
+  </style>
+
+  {% schema %}
+{
+  "name": "statement",
+  "settings": [
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Notre engagement pour une beauté régénérée" },
+    { "type": "textarea", "id": "message", "label": "Message", "default": "Our customers notice visible results." },
+    { "type": "text", "id": "author", "label": "Author", "default": "Sophie M." },
+    {
+      "type": "select",
+      "id": "vertical_position",
+      "label": "Vertical position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "middle", "label": "Middle" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "middle"
+    },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#ffffff" },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_width",
+      "label": "Text width",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "wide", "label": "Full" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "range",
+      "id": "min_height_desktop",
+      "label": "Min height desktop",
+      "min": 0,
+      "max": 1200,
+      "step": 12,
+      "default": 420
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Min height mobile",
+      "min": 0,
+      "max": 800,
+      "step": 8,
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 40
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 4, "default": 36 },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 36
+    }
+  ],
+  "presets": [{ "name": "statement", "category": "Sections" }]
+}
+  {% endschema %}
+</section>

@@ -2599,8 +2599,8 @@
         "name": "Multicolumn"
       }
     },
-    "knr-testimonials": {
-      "name": "Testimonials",
+    "knr-statement": {
+      "name": "statement",
       "settings": {
         "padding_top": { "label": "Top margin" },
         "padding_bottom": { "label": "Bottom margin" },
@@ -2640,8 +2640,37 @@
         }
       },
       "presets": {
-        "name": "Testimonials"
+        "name": "statement"
       }
+    },
+    "knr-what-customers-say": {
+      "name": "What customers say",
+      "settings": {
+        "width_mode": { "label": "Width mode", "options__full": { "label": "Full width" }, "options__theme": { "label": "Use theme width" } },
+        "padding_top": { "label": "Padding top" },
+        "padding_bottom": { "label": "Padding bottom" },
+        "padding_left": { "label": "Padding left" },
+        "padding_right": { "label": "Padding right" },
+        "background_color": { "label": "Background color" },
+        "text_color": { "label": "Text color" },
+        "title": { "label": "Title", "default": "What customers say" },
+        "description": { "label": "Description" },
+        "before_image": { "label": "Before image" },
+        "after_image": { "label": "After image" },
+        "text_alignment": { "label": "Text alignment for reviews", "options__left": { "label": "Left" }, "options__center": { "label": "Center" }, "options__right": { "label": "Right" } }
+      },
+      "blocks": {
+        "review": {
+          "name": "Review",
+          "settings": {
+            "rating": { "label": "Rating (1-5)" },
+            "person": { "label": "Person" },
+            "comment": { "label": "Comment" },
+            "item_spacing": { "label": "Item spacing (px)" }
+          }
+        }
+      },
+      "presets": { "name": "What customers say" }
     },
     "newsletter": {
       "name": "Email signup",

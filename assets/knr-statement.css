@@ -1,0 +1,59 @@
+.knr-statement {
+    background-color: transparent;
+}
+.knr-statement__title {
+    margin-bottom: 16px;
+    text-align: center;
+}
+.knr-statement__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-start;
+    justify-content: center;
+}
+.knr-testimonial-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+.knr-testimonial-item__media img {
+    display: block;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.knr-testimonial-item__content {
+    display: block;
+}
+.knr-testimonial-item__message {
+    margin-bottom: 8px;
+    font-size: 16px;
+    line-height: 1.4;
+}
+.knr-testimonial-item__person {
+    font-weight: 600;
+    font-size: 14px;
+    color: #666;
+}
+.knr-text-left {
+    text-align: left;
+}
+.knr-text-center {
+    text-align: center;
+}
+.knr-text-right {
+    text-align: right;
+}
+
+@media (max-width: 749px) {
+    .knr-statement__list {
+    flex-direction: column;
+    align-items: stretch;
+    }
+    .knr-testimonial-item {
+    width: 100%;
+    }
+}
