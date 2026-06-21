@@ -1921,6 +1921,19 @@
         }
       }
     },
+    "product": {
+      "blocks": {
+        "delivery": {
+          "settings": {
+            "header": { "content": "Delivery" },
+            "show_delivery_date": { "label": "Show estimated delivery date" },
+            "delivery_date_threshold": { "label": "Delivery delay (days)" },
+            "count_business_days": { "label": "Count business days (skip Sundays)" },
+            "estimated": "Estimated delivery"
+          }
+        }
+      }
+    },
     "main-product": {
       "name": "Product information",
       "blocks": {
@@ -2584,6 +2597,50 @@
       },
       "presets": {
         "name": "Multicolumn"
+      }
+    },
+    "knr-testimonials": {
+      "name": "Testimonials",
+      "settings": {
+        "padding_top": { "label": "Top margin" },
+        "padding_bottom": { "label": "Bottom margin" },
+        "background_image": { "label": "Background image" },
+        "title": { "label": "Section title" }
+      },
+      "blocks": {
+        "testimonial_item": {
+          "name": "Testimonial",
+          "settings": {
+            "image": { "label": "Image (optional)" },
+            "message": { "label": "Message", "default": "Great product — I love it!" },
+            "person": { "label": "Person / Name", "default": "Sophie M." },
+            "pad_top": { "label": "Padding top" },
+            "pad_bottom": { "label": "Padding bottom" },
+            "pad_left": { "label": "Padding left" },
+            "pad_right": { "label": "Padding right" },
+            "width": {
+              "label": "Width",
+              "options__narrow": { "label": "Narrow" },
+              "options__medium": { "label": "Medium" },
+              "options__wide": { "label": "Full" }
+            },
+            "text_alignment": {
+              "label": "Text alignment",
+              "options__left": { "label": "Left" },
+              "options__center": { "label": "Center" },
+              "options__right": { "label": "Right" }
+            },
+            "vertical_position": {
+              "label": "Vertical position",
+              "options__top": { "label": "Top" },
+              "options__middle": { "label": "Middle" },
+              "options__bottom": { "label": "Bottom" }
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Testimonials"
       }
     },
     "newsletter": {

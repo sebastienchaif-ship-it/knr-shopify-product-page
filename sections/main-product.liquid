@@ -145,6 +145,8 @@
                   {%- endif -%}
                   {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
                     <div class="product__tax caption rte">
+                      , { "type": "checkbox", "id": "count_business_days", "label": "Prendre en compte jours ouvrés
+                      (ignore le dimanche)", "default": true }
                       {%- if cart.duties_included and cart.taxes_included -%}
                         {{ 'products.product.duties_and_taxes_included' | t }}
                       {%- elsif cart.taxes_included -%}
@@ -176,9 +178,6 @@
                         {%- if product.selected_or_first_available_variant.inventory_quantity
                             <= block.settings.inventory_threshold
                         -%}
-                          <span class="svg-wrapper" style="color: rgb(238, 148, 65)">
-                            {{- 'icon-inventory-status.svg' | inline_asset_content -}}
-                          </span>
                           {%- if block.settings.show_inventory_quantity -%}
                             {{-
                               'products.product.inventory_low_stock_show_count'
@@ -188,9 +187,6 @@
                             {{- 'products.product.inventory_low_stock' | t -}}
                           {%- endif -%}
                         {%- else -%}
-                          <span class="svg-wrapper" style="color: rgb(62, 214, 96)">
-                            {{- 'icon-inventory-status.svg' | inline_asset_content -}}
-                          </span>
                           {%- if block.settings.show_inventory_quantity -%}
                             {{-
                               'products.product.inventory_in_stock_show_count'
@@ -202,17 +198,69 @@
                         {%- endif -%}
                       {%- else -%}
                         {%- if product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
-                          <span class="svg-wrapper" style="color: rgb(62, 214, 96)">
-                            {{- 'icon-inventory-status.svg' | inline_asset_content -}}
-                          </span>
                           {{- 'products.product.inventory_out_of_stock_continue_selling' | t -}}
                         {%- else -%}
-                          <span class="svg-wrapper" style="color: rgb(200, 200, 200)">
-                            {{- 'icon-inventory-status.svg' | inline_asset_content -}}
-                          </span>
                           {{- 'products.product.inventory_out_of_stock' | t -}}
                         {%- endif -%}
                       {%- endif -%}
+                    {%- endif -%}
+                    {%- if block.settings.show_delivery_date
+                      and product.selected_or_first_available_variant.inventory_management == 'shopify'
+                      and product.selected_or_first_available_variant.inventory_quantity > 0
+                    -%}
+                      <span
+                        class="knr-delivery-date"
+                        data-delivery-threshold="{{ block.settings.delivery_date_threshold }}"
+                        data-count-business-days="{{ block.settings.count_business_days }}"
+                        aria-hidden="false"
+                      ></span>
+
+                      <script>
+                        (function () {
+                          function computeDeliveryDate(startDate, days, excludeSunday) {
+                            var d = new Date(startDate);
+                            var added = 0;
+                            while (added < days) {
+                              d.setDate(d.getDate() + 1);
+                              if (excludeSunday) {
+                                if (d.getDay() === 0) continue; // skip Sunday
+                              }
+                              added += 1;
+                            }
+                            return d;
+                          }
+
+                          function formatDate(d) {
+                            try {
+                              var opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+                              var str = new Intl.DateTimeFormat('fr-FR', opts).format(d);
+                              return str.charAt(0).toUpperCase() + str.slice(1);
+                            } catch (e) {
+                              var s = d.toDateString();
+                              return s.charAt(0).toUpperCase() + s.slice(1);
+                            }
+                          }
+
+                          var el =
+                            document.currentScript &&
+                            document.currentScript.previousElementSibling &&
+                            document.currentScript.previousElementSibling.classList &&
+                            document.currentScript.previousElementSibling.classList.contains('knr-delivery-date')
+                              ? document.currentScript.previousElementSibling
+                              : null;
+                          if (!el) {
+                            el = document.querySelector('.knr-delivery-date[data-delivery-threshold]');
+                          }
+                          if (!el) return;
+
+                          var days = parseInt(el.getAttribute('data-delivery-threshold') || '0', 10);
+                          var excludeSunday =
+                            el.getAttribute('data-count-business-days') === 'true' ||
+                            el.getAttribute('data-count-business-days') === '1';
+                          var target = computeDeliveryDate(new Date(), days, excludeSunday);
+                          el.textContent = {{ 'sections.product.blocks.delivery.estimated' | t | json }} + ': ' + formatDate(target);
+                        })();
+                      </script>
                     {%- endif -%}
                   </p>
                 {%- when 'description' -%}
@@ -939,6 +987,25 @@
           "id": "show_inventory_quantity",
           "label": "t:sections.main-product.blocks.inventory.settings.show_inventory_quantity.label",
           "default": true
+        },
+        {
+          "type": "header",
+          "content": "t:sections.product.blocks.delivery.settings.header.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_delivery_date",
+          "label": "t:sections.product.blocks.delivery.settings.show_delivery_date.label",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "delivery_date_threshold",
+          "label": "t:sections.product.blocks.delivery.settings.delivery_date_threshold.label",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "default": 7
         }
       ]
     },

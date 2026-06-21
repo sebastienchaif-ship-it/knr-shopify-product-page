@@ -1599,6 +1599,19 @@
         }
       }
     },
+    "product": {
+      "blocks": {
+        "delivery": {
+          "settings": {
+            "header": { "content": "Livraison" },
+            "show_delivery_date": { "label": "Afficher la date de livraison estimée" },
+            "delivery_date_threshold": { "label": "Délai de livraison (jours)" },
+            "count_business_days": { "label": "Prendre en compte jours ouvrés (ignore le dimanche)" },
+            "estimated": "Livraison estimée"
+          }
+        }
+      }
+    },
     "main-product": {
       "blocks": {
         "text": {

@@ -20,12 +20,13 @@
           "type": "title",
           "settings": {}
         },
-        "text_LYyQPt": {
-          "type": "text",
-          "settings": {
-            "text": "<strong>Yuka<\/strong> {{ product.metafields.product_info.yuka_score.value }}\/100 - <strong>INCI Beauty<\/strong> {{ product.metafields.product_info.inci_score.value }} \/20",
-            "text_style": "body"
-          }
+        "knr_product_scores_FDqd8F": {
+          "type": "knr_product_scores",
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
         },
         "variant_picker": {
           "type": "variant_picker",
@@ -53,8 +54,8 @@
             "show_inventory_quantity": false
           }
         },
-        "description": {
-          "type": "description",
+        "knr_product_accordions_EVzn8L": {
+          "type": "knr_product_accordions",
           "settings": {}
         }
       },
@@ -62,12 +63,13 @@
         "knr_breadcrumb_J6FF9h",
         "knr_product_labels_z8KWiN",
         "title",
-        "text_LYyQPt",
+        "knr_product_scores_FDqd8F",
+        "description",
         "variant_picker",
         "price",
         "buy_buttons",
         "inventory_Q9VrGf",
-        "description"
+        "knr_product_accordions_EVzn8L"
       ],
       "settings": {
         "enable_sticky_info": false,

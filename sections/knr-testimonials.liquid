@@ -1,0 +1,213 @@
+{% comment %}
+  KNR Testimonials section
+  - repeatable testimonial blocks with per-item padding, width, text alignment and vertical position
+{% endcomment %}
+<section
+  id="knr-testimonials-{{ section.id }}"
+  class="knr-testimonials section-{{ section.id }}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; {% if section.settings.background_image != blank %}background-image: url({{ section.settings.background_image | img_url: 'master' }}); background-size: cover; background-position: center;{% endif %}"
+>
+  <div class="page-width">
+    {% if section.settings.title != blank %}
+      <h2 class="knr-testimonials__title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="knr-testimonials__list">
+      {% for block in section.blocks %}
+        <div
+          id="Testimonial-{{ section.id }}-{{ block.id }}"
+          class="knr-testimonial-item {% if block.settings.text_alignment %}knr-text-{{ block.settings.text_alignment }}{% endif %}"
+          style="padding-top: {{ block.settings.pad_top }}px; padding-bottom: {{ block.settings.pad_bottom }}px; padding-left: {{ block.settings.pad_left }}px; padding-right: {{ block.settings.pad_right }}px; {% if block.settings.width == 'narrow' %}max-width:480px;{% elsif block.settings.width == 'medium' %}max-width:720px;{% else %}max-width:100%;{% endif %} align-self:{% if block.settings.vertical_position == 'top' %}flex-start{% elsif block.settings.vertical_position == 'middle' %}center{% else %}flex-end{% endif %};"
+        >
+          {% if block.settings.image != blank %}
+            <div class="knr-testimonial-item__media">
+              <img
+                src="{{ block.settings.image | img_url: '80x80' }}"
+                alt="{{ block.settings.person }}"
+                width="80"
+                height="80"
+              >
+            </div>
+          {% endif %}
+
+          <div class="knr-testimonial-item__content">
+            <div class="knr-testimonial-item__message">{{ block.settings.message }}</div>
+            {% if block.settings.person != blank %}
+              <div class="knr-testimonial-item__person">{{ block.settings.person }}</div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {%- style -%}
+    .knr-testimonials {
+      background-color: transparent;
+    }
+    .knr-testimonials__title {
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .knr-testimonials__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .knr-testimonial-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      box-sizing: border-box;
+    }
+    .knr-testimonial-item__media img {
+      display: block;
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .knr-testimonial-item__content {
+      display: block;
+    }
+    .knr-testimonial-item__message {
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+    .knr-testimonial-item__person {
+      font-weight: 600;
+      font-size: 14px;
+      color: #666;
+    }
+    .knr-text-left {
+      text-align: left;
+    }
+    .knr-text-center {
+      text-align: center;
+    }
+    .knr-text-right {
+      text-align: right;
+    }
+
+    @media (max-width: 749px) {
+      .knr-testimonials__list {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .knr-testimonial-item {
+        width: 100%;
+      }
+    }
+  {%- endstyle -%}
+
+  {% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top margin",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom margin",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 36
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Testimonials"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial_item",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image (optional)" },
+        { "type": "textarea", "id": "message", "label": "Message", "default": "Great product — I love it!" },
+        { "type": "text", "id": "person", "label": "Person / Name", "default": "Sophie M." },
+        { "type": "range", "id": "pad_top", "label": "Padding top", "min": 0, "max": 200, "step": 4, "default": 16 },
+        {
+          "type": "range",
+          "id": "pad_bottom",
+          "label": "Padding bottom",
+          "min": 0,
+          "max": 200,
+          "step": 4,
+          "default": 16
+        },
+        { "type": "range", "id": "pad_left", "label": "Padding left", "min": 0, "max": 200, "step": 4, "default": 16 },
+        {
+          "type": "range",
+          "id": "pad_right",
+          "label": "Padding right",
+          "min": 0,
+          "max": 200,
+          "step": 4,
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Width",
+          "options": [
+            { "value": "narrow", "label": "Narrow" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "wide", "label": "Full" }
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "vertical_position",
+          "label": "Vertical position",
+          "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "middle", "label": "Middle" },
+            { "value": "bottom", "label": "Bottom" }
+          ],
+          "default": "middle"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "category": "Sections",
+      "blocks": [{ "type": "testimonial_item" }, { "type": "testimonial_item" }]
+    }
+  ]
+}
+  {% endschema %}
+</section>
