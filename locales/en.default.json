@@ -287,10 +287,18 @@
       "blocks": {
         "delivery": {
           "settings": {
-            "header": { "content": "Delivery" },
-            "show_delivery_date": { "label": "Show estimated delivery date" },
-            "delivery_date_threshold": { "label": "Delivery delay (days)" },
-            "count_business_days": { "label": "Count business days (skip Sundays)" }
+            "header": {
+              "content": "Delivery"
+            },
+            "show_delivery_date": {
+              "label": "Show estimated delivery date"
+            },
+            "delivery_date_threshold": {
+              "label": "Delivery delay (days)"
+            },
+            "count_business_days": {
+              "label": "Count business days (skip Sundays)"
+            }
           },
           "estimated": "Estimated delivery"
         }

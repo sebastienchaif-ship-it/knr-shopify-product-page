@@ -1,0 +1,287 @@
+{% comment %}
+  KNR — "Ce que disent nos clients" section
+  - width mode: full or theme width
+  - padding top/bottom/left/right (range)
+  - background & text colors
+  - title + description
+  - before / after images with draggable slider
+  - repeatable review blocks: rating (1-5), person, comment, item spacing
+  - section-level text alignment for review text
+{% endcomment %}
+
+<section
+  id="knr-what-customers-{{ section.id }}"
+  class="knr-what-customers"
+  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; padding-left: {{ section.settings.padding_left }}px; padding-right: {{ section.settings.padding_right }}px;"
+>
+  {% if section.settings.width_mode == 'theme' %}
+    <div class="page-width">
+  {% endif %}
+
+  <div class="knr-what-customers__header">
+    {% if section.settings.title != blank %}
+      <h2 class="knr-what-customers__title">{{ section.settings.title }}</h2>
+    {% endif %}
+    {% if section.settings.description != blank %}
+      <p class="knr-what-customers__description">{{ section.settings.description }}</p>
+    {% endif %}
+  </div>
+
+  <div class="knr-what-customers__compare" id="knr-compare-{{ section.id }}" data-section-id="{{ section.id }}">
+    <div class="knr-compare__wrap">
+      <img
+        class="knr-compare__before"
+        src="{{ section.settings.before_image | img_url: '1600x' }}"
+        alt="Before"
+        width="1600"
+        height="900"
+      >
+      <div class="knr-compare__after" style="width:50%">
+        <img src="{{ section.settings.after_image | img_url: '1600x' }}" alt="After" width="1600" height="900">
+      </div>
+      <div class="knr-compare__handle" role="slider" aria-label="Before/after slider" tabindex="0"></div>
+    </div>
+  </div>
+
+  <div class="knr-what-customers__reviews" style="text-align: {{ section.settings.text_alignment }};">
+    {% for block in section.blocks %}
+      <div class="knr-review" style="padding: {{ block.settings.item_spacing }}px;">
+        <div class="knr-review__rating">
+          {% for i in (1..block.settings.rating) -%}
+            ★
+          {%- endfor %}
+        </div>
+        <div class="knr-review__comment">{{ block.settings.comment }}</div>
+        <div class="knr-review__person">— {{ block.settings.person }}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if section.settings.width_mode == 'theme' %}
+    </div>
+  {% endif %}
+
+  {%- style -%}
+    .knr-what-customers {
+      position: relative;
+    }
+    .knr-what-customers__header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .knr-what-customers__title {
+      margin: 0 0 8px;
+    }
+    .knr-what-customers__description {
+      margin: 0 0 24px;
+      color: inherit;
+    }
+    .knr-compare__wrap {
+      position: relative;
+      overflow: hidden;
+      max-width: 100%;
+      margin: 0 auto 32px;
+    }
+    .knr-compare__wrap img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .knr-compare__after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    .knr-compare__after img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .knr-compare__handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      margin-left: -2px;
+      background: rgba(255, 255, 255, 0.8);
+      cursor: ew-resize;
+      z-index: 10;
+    }
+    .knr-what-customers__reviews {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .knr-review {
+      max-width: 720px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 6px;
+    }
+    .knr-review__rating {
+      color: gold;
+      margin-bottom: 8px;
+    }
+    .knr-review__comment {
+      font-size: 16px;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .knr-review__person {
+      font-weight: 600;
+      font-size: 14px;
+      color: inherit;
+    }
+
+    @media (max-width: 749px) {
+      .knr-what-customers__reviews {
+        flex-direction: column;
+      }
+      .knr-review {
+        width: 100%;
+      }
+    }
+  {%- endstyle -%}
+
+  <script>
+    (function () {
+      var root = document.getElementById('knr-compare-{{ section.id }}');
+      if (!root) return;
+      var wrap = root.querySelector('.knr-compare__wrap');
+      var after = root.querySelector('.knr-compare__after');
+      var handle = root.querySelector('.knr-compare__handle');
+      if (!wrap || !after || !handle) return;
+
+      function setPos(x) {
+        var rect = wrap.getBoundingClientRect();
+        var pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+        after.style.width = pct * 100 + '%';
+        handle.style.left = pct * 100 + '%';
+      }
+
+      var dragging = false;
+      handle.addEventListener('mousedown', function (e) {
+        dragging = true;
+        e.preventDefault();
+      });
+      window.addEventListener('mouseup', function () {
+        dragging = false;
+      });
+      window.addEventListener('mousemove', function (e) {
+        if (dragging) setPos(e.clientX);
+      });
+
+      handle.addEventListener('touchstart', function (e) {
+        dragging = true;
+      });
+      window.addEventListener('touchend', function () {
+        dragging = false;
+      });
+      window.addEventListener('touchmove', function (e) {
+        if (dragging && e.touches && e.touches[0]) setPos(e.touches[0].clientX);
+      });
+
+      handle.addEventListener('keydown', function (e) {
+        var rect = wrap.getBoundingClientRect();
+        var cur = parseFloat((after.style.width || '50%').replace('%', '')) || 50;
+        if (e.key === 'ArrowLeft') setPos(rect.left + rect.width * Math.max(0, cur / 100 - 0.05));
+        if (e.key === 'ArrowRight') setPos(rect.left + rect.width * Math.min(1, cur / 100 + 0.05));
+      });
+    })();
+  </script>
+
+  {% schema %}
+{
+  "name": "Ce que disent nos clients",
+  "settings": [
+    {
+      "type": "select",
+      "id": "width_mode",
+      "label": "Width mode",
+      "options": [
+        { "value": "full", "label": "Full width" },
+        { "value": "theme", "label": "Use theme width" }
+      ],
+      "default": "theme"
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 4, "default": 40 },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 40
+    },
+    { "type": "range", "id": "padding_left", "label": "Padding left", "min": 0, "max": 200, "step": 4, "default": 20 },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "label": "Padding right",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 20
+    },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Ce que disent nos clientes" },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Des transformations visibles dès 4 semaines. Nos clientes témoignent d'une peau visiblement régénérée."
+    },
+    { "type": "image_picker", "id": "before_image", "label": "Before image" },
+    { "type": "image_picker", "id": "after_image", "label": "After image" },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment for reviews",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Rating (1-5)", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "person", "label": "Person", "default": "Clara T." },
+        {
+          "type": "textarea",
+          "id": "comment",
+          "label": "Comment",
+          "default": "J'utilise ce sérum depuis trois mois et la différence est saisissante."
+        },
+        {
+          "type": "range",
+          "id": "item_spacing",
+          "label": "Item spacing (px)",
+          "min": 0,
+          "max": 80,
+          "step": 4,
+          "default": 24
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ce que disent nos clients",
+      "category": "Sections",
+      "blocks": [{ "type": "review" }, { "type": "review" }]
+    }
+  ]
+}
+  {% endschema %}
+</section>

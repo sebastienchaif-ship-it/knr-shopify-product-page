@@ -1925,10 +1925,18 @@
       "blocks": {
         "delivery": {
           "settings": {
-            "header": { "content": "Delivery" },
-            "show_delivery_date": { "label": "Show estimated delivery date" },
-            "delivery_date_threshold": { "label": "Delivery delay (days)" },
-            "count_business_days": { "label": "Count business days (skip Sundays)" },
+            "header": {
+              "content": "Delivery"
+            },
+            "show_delivery_date": {
+              "label": "Show estimated delivery date"
+            },
+            "delivery_date_threshold": {
+              "label": "Delivery delay (days)"
+            },
+            "count_business_days": {
+              "label": "Count business days (skip Sundays)"
+            },
             "estimated": "Estimated delivery"
           }
         }
@@ -2370,6 +2378,9 @@
           },
           "options__3": {
             "label": "Large"
+          },
+          "options__4": {
+            "label": "Full screen"
           }
         },
         "image_zoom": {
@@ -2602,39 +2613,81 @@
     "knr-statement": {
       "name": "statement",
       "settings": {
-        "padding_top": { "label": "Top margin" },
-        "padding_bottom": { "label": "Bottom margin" },
-        "background_image": { "label": "Background image" },
-        "title": { "label": "Section title" }
+        "padding_top": {
+          "label": "Top margin"
+        },
+        "padding_bottom": {
+          "label": "Bottom margin"
+        },
+        "background_image": {
+          "label": "Background image"
+        },
+        "title": {
+          "label": "Section title"
+        }
       },
       "blocks": {
         "testimonial_item": {
           "name": "Testimonial",
           "settings": {
-            "image": { "label": "Image (optional)" },
-            "message": { "label": "Message", "default": "Great product — I love it!" },
-            "person": { "label": "Person / Name", "default": "Sophie M." },
-            "pad_top": { "label": "Padding top" },
-            "pad_bottom": { "label": "Padding bottom" },
-            "pad_left": { "label": "Padding left" },
-            "pad_right": { "label": "Padding right" },
+            "image": {
+              "label": "Image (optional)"
+            },
+            "message": {
+              "label": "Message",
+              "default": "Great product — I love it!"
+            },
+            "person": {
+              "label": "Person \/ Name",
+              "default": "Sophie M."
+            },
+            "pad_top": {
+              "label": "Padding top"
+            },
+            "pad_bottom": {
+              "label": "Padding bottom"
+            },
+            "pad_left": {
+              "label": "Padding left"
+            },
+            "pad_right": {
+              "label": "Padding right"
+            },
             "width": {
               "label": "Width",
-              "options__narrow": { "label": "Narrow" },
-              "options__medium": { "label": "Medium" },
-              "options__wide": { "label": "Full" }
+              "options__narrow": {
+                "label": "Narrow"
+              },
+              "options__medium": {
+                "label": "Medium"
+              },
+              "options__wide": {
+                "label": "Full"
+              }
             },
             "text_alignment": {
               "label": "Text alignment",
-              "options__left": { "label": "Left" },
-              "options__center": { "label": "Center" },
-              "options__right": { "label": "Right" }
+              "options__left": {
+                "label": "Left"
+              },
+              "options__center": {
+                "label": "Center"
+              },
+              "options__right": {
+                "label": "Right"
+              }
             },
             "vertical_position": {
               "label": "Vertical position",
-              "options__top": { "label": "Top" },
-              "options__middle": { "label": "Middle" },
-              "options__bottom": { "label": "Bottom" }
+              "options__top": {
+                "label": "Top"
+              },
+              "options__middle": {
+                "label": "Middle"
+              },
+              "options__bottom": {
+                "label": "Bottom"
+              }
             }
           }
         }
@@ -2646,31 +2699,81 @@
     "knr-what-customers-say": {
       "name": "What customers say",
       "settings": {
-        "width_mode": { "label": "Width mode", "options__full": { "label": "Full width" }, "options__theme": { "label": "Use theme width" } },
-        "padding_top": { "label": "Padding top" },
-        "padding_bottom": { "label": "Padding bottom" },
-        "padding_left": { "label": "Padding left" },
-        "padding_right": { "label": "Padding right" },
-        "background_color": { "label": "Background color" },
-        "text_color": { "label": "Text color" },
-        "title": { "label": "Title", "default": "What customers say" },
-        "description": { "label": "Description" },
-        "before_image": { "label": "Before image" },
-        "after_image": { "label": "After image" },
-        "text_alignment": { "label": "Text alignment for reviews", "options__left": { "label": "Left" }, "options__center": { "label": "Center" }, "options__right": { "label": "Right" } }
+        "width_mode": {
+          "label": "Width mode",
+          "options__full": {
+            "label": "Full width"
+          },
+          "options__theme": {
+            "label": "Use theme width"
+          }
+        },
+        "padding_top": {
+          "label": "Padding top"
+        },
+        "padding_bottom": {
+          "label": "Padding bottom"
+        },
+        "padding_left": {
+          "label": "Padding left"
+        },
+        "padding_right": {
+          "label": "Padding right"
+        },
+        "background_color": {
+          "label": "Background color"
+        },
+        "text_color": {
+          "label": "Text color"
+        },
+        "title": {
+          "label": "Title",
+          "default": "What customers say"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "before_image": {
+          "label": "Before image"
+        },
+        "after_image": {
+          "label": "After image"
+        },
+        "text_alignment": {
+          "label": "Text alignment for reviews",
+          "options__left": {
+            "label": "Left"
+          },
+          "options__center": {
+            "label": "Center"
+          },
+          "options__right": {
+            "label": "Right"
+          }
+        }
       },
       "blocks": {
         "review": {
           "name": "Review",
           "settings": {
-            "rating": { "label": "Rating (1-5)" },
-            "person": { "label": "Person" },
-            "comment": { "label": "Comment" },
-            "item_spacing": { "label": "Item spacing (px)" }
+            "rating": {
+              "label": "Rating (1-5)"
+            },
+            "person": {
+              "label": "Person"
+            },
+            "comment": {
+              "label": "Comment"
+            },
+            "item_spacing": {
+              "label": "Item spacing (px)"
+            }
           }
         }
       },
-      "presets": { "name": "What customers say" }
+      "presets": {
+        "name": "What customers say"
+      }
     },
     "newsletter": {
       "name": "Email signup",

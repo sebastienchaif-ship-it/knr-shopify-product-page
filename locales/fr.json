@@ -61,7 +61,6 @@
   "newsletter": {
     "label": "E-mail",
     "success": "Merci de votre inscription",
-    
     "button_label": "S'inscrire"
   },
   "accessibility": {
@@ -321,19 +320,27 @@
       "taxes_at_checkout_shipping_at_checkout_with_policy_html": "Taxes, réductions et <a href=\"{{ link }}\">frais d’expédition<\/a> calculés à l’étape du paiement.",
       "taxes_at_checkout_shipping_at_checkout_without_policy": "Taxes, réductions et frais d’expédition calculés à l’étape du paiement."
     },
-      "product": {
-        "blocks": {
-          "delivery": {
-            "settings": {
-              "header": { "content": "Livraison" },
-              "show_delivery_date": { "label": "Afficher la date de livraison estimée" },
-              "delivery_date_threshold": { "label": "Délai de livraison (jours)" },
-              "count_business_days": { "label": "Prendre en compte jours ouvrés (ignore le dimanche)" }
+    "product": {
+      "blocks": {
+        "delivery": {
+          "settings": {
+            "header": {
+              "content": "Livraison"
             },
-            "estimated": "Livraison estimée"
-          }
+            "show_delivery_date": {
+              "label": "Afficher la date de livraison estimée"
+            },
+            "delivery_date_threshold": {
+              "label": "Délai de livraison (jours)"
+            },
+            "count_business_days": {
+              "label": "Prendre en compte jours ouvrés (ignore le dimanche)"
+            }
+          },
+          "estimated": "Livraison estimée"
         }
-      },
+      }
+    },
     "footer": {
       "payment": "Moyens de paiement"
     },

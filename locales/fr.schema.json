@@ -1603,10 +1603,18 @@
       "blocks": {
         "delivery": {
           "settings": {
-            "header": { "content": "Livraison" },
-            "show_delivery_date": { "label": "Afficher la date de livraison estimée" },
-            "delivery_date_threshold": { "label": "Délai de livraison (jours)" },
-            "count_business_days": { "label": "Prendre en compte jours ouvrés (ignore le dimanche)" },
+            "header": {
+              "content": "Livraison"
+            },
+            "show_delivery_date": {
+              "label": "Afficher la date de livraison estimée"
+            },
+            "delivery_date_threshold": {
+              "label": "Délai de livraison (jours)"
+            },
+            "count_business_days": {
+              "label": "Prendre en compte jours ouvrés (ignore le dimanche)"
+            },
             "estimated": "Livraison estimée"
           }
         }
@@ -2050,6 +2058,9 @@
           },
           "options__3": {
             "label": "Grand"
+          },
+          "options__4": {
+            "label": "Plein écran"
           }
         },
         "mobile_thumbnails": {
@@ -2274,58 +2285,167 @@
     "knr-what-customers-say": {
       "name": "Ce que disent nos clients",
       "settings": {
-        "width_mode": { "label": "Mode de largeur", "options__full": { "label": "Pleine largeur" }, "options__theme": { "label": "Utiliser la largeur du thème" } },
-        "padding_top": { "label": "Marge haut" },
-        "padding_bottom": { "label": "Marge bas" },
-        "padding_left": { "label": "Marge gauche" },
-        "padding_right": { "label": "Marge droite" },
-        "background_color": { "label": "Couleur d'arrière-plan" },
-        "text_color": { "label": "Couleur du texte" },
-        "title": { "label": "Titre", "default": "Ce que disent nos clientes" },
-        "description": { "label": "Description" },
-        "before_image": { "label": "Image avant" },
-        "after_image": { "label": "Image après" },
-        "text_alignment": { "label": "Alignement du texte", "options__left": { "label": "Gauche" }, "options__center": { "label": "Centre" }, "options__right": { "label": "Droite" } }
+        "width_mode": {
+          "label": "Mode de largeur",
+          "options__full": {
+            "label": "Pleine largeur"
+          },
+          "options__theme": {
+            "label": "Utiliser la largeur du thème"
+          }
+        },
+        "padding_top": {
+          "label": "Marge haut"
+        },
+        "padding_bottom": {
+          "label": "Marge bas"
+        },
+        "padding_left": {
+          "label": "Marge gauche"
+        },
+        "padding_right": {
+          "label": "Marge droite"
+        },
+        "background_color": {
+          "label": "Couleur d'arrière-plan"
+        },
+        "text_color": {
+          "label": "Couleur du texte"
+        },
+        "title": {
+          "label": "Titre",
+          "default": "Ce que disent nos clientes"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "before_image": {
+          "label": "Image avant"
+        },
+        "after_image": {
+          "label": "Image après"
+        },
+        "text_alignment": {
+          "label": "Alignement du texte",
+          "options__left": {
+            "label": "Gauche"
+          },
+          "options__center": {
+            "label": "Centre"
+          },
+          "options__right": {
+            "label": "Droite"
+          }
+        }
       },
       "blocks": {
         "review": {
           "name": "Avis",
           "settings": {
-            "rating": { "label": "Note (1-5)" },
-            "person": { "label": "Personne" },
-            "comment": { "label": "Commentaire" },
-            "item_spacing": { "label": "Espacement de l'élément (px)" }
+            "rating": {
+              "label": "Note (1-5)"
+            },
+            "person": {
+              "label": "Personne"
+            },
+            "comment": {
+              "label": "Commentaire"
+            },
+            "item_spacing": {
+              "label": "Espacement de l'élément (px)"
+            }
           }
         }
       },
-      "presets": { "name": "Ce que disent nos clients" }
+      "presets": {
+        "name": "Ce que disent nos clients"
+      }
     },
     "knr-statement": {
       "name": "Statement",
       "settings": {
-        "padding_top": { "label": "Marge haut" },
-        "padding_bottom": { "label": "Marge bas" },
-        "background_image": { "label": "Image d'arrière-plan" },
-        "title": { "label": "Titre de la section" }
+        "padding_top": {
+          "label": "Marge haut"
+        },
+        "padding_bottom": {
+          "label": "Marge bas"
+        },
+        "background_image": {
+          "label": "Image d'arrière-plan"
+        },
+        "title": {
+          "label": "Titre de la section"
+        }
       },
       "blocks": {
         "testimonial_item": {
           "name": "Témoignage",
           "settings": {
-            "image": { "label": "Image (optionnelle)" },
-            "message": { "label": "Message", "default": "Produit excellent — J'adore !" },
-            "person": { "label": "Personne / Nom", "default": "Sophie M." },
-            "pad_top": { "label": "Padding haut" },
-            "pad_bottom": { "label": "Padding bas" },
-            "pad_left": { "label": "Padding gauche" },
-            "pad_right": { "label": "Padding droite" },
-            "width": { "label": "Largeur", "options__narrow": { "label": "Étroit" }, "options__medium": { "label": "Moyen" }, "options__wide": { "label": "Pleine" } },
-            "text_alignment": { "label": "Alignement du texte", "options__left": { "label": "Gauche" }, "options__center": { "label": "Centre" }, "options__right": { "label": "Droite" } },
-            "vertical_position": { "label": "Position verticale", "options__top": { "label": "Haut" }, "options__middle": { "label": "Milieu" }, "options__bottom": { "label": "Bas" } }
+            "image": {
+              "label": "Image (optionnelle)"
+            },
+            "message": {
+              "label": "Message",
+              "default": "Produit excellent — J'adore !"
+            },
+            "person": {
+              "label": "Personne \/ Nom",
+              "default": "Sophie M."
+            },
+            "pad_top": {
+              "label": "Padding haut"
+            },
+            "pad_bottom": {
+              "label": "Padding bas"
+            },
+            "pad_left": {
+              "label": "Padding gauche"
+            },
+            "pad_right": {
+              "label": "Padding droite"
+            },
+            "width": {
+              "label": "Largeur",
+              "options__narrow": {
+                "label": "Étroit"
+              },
+              "options__medium": {
+                "label": "Moyen"
+              },
+              "options__wide": {
+                "label": "Pleine"
+              }
+            },
+            "text_alignment": {
+              "label": "Alignement du texte",
+              "options__left": {
+                "label": "Gauche"
+              },
+              "options__center": {
+                "label": "Centre"
+              },
+              "options__right": {
+                "label": "Droite"
+              }
+            },
+            "vertical_position": {
+              "label": "Position verticale",
+              "options__top": {
+                "label": "Haut"
+              },
+              "options__middle": {
+                "label": "Milieu"
+              },
+              "options__bottom": {
+                "label": "Bas"
+              }
+            }
           }
         }
       },
-      "presets": { "name": "statement" }
+      "presets": {
+        "name": "statement"
+      }
     },
     "newsletter": {
       "name": "Inscription à la liste de diffusion",
