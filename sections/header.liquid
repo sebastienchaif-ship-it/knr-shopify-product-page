@@ -247,7 +247,10 @@
           </localization-form>
         {%- endif -%}
       </div>
-      {% render 'header-search', input_id: 'Search-In-Modal' %}
+
+      <a href="#" class="header__icon header__icon--maps link focus-inset" id="maps-icon-bubble">
+        <span class="svg-wrapper">{{ 'icon-maps.svg' | inline_asset_content }}</span>
+      </a>
 
       {%- if shop.customer_accounts_enabled -%}
         <a
@@ -284,6 +287,8 @@
             {% render block %}
         {%- endcase -%}
       {%- endfor -%}
+
+      {% render 'header-search', input_id: 'Search-In-Modal' %}
 
       <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
         {% if cart == empty %}
