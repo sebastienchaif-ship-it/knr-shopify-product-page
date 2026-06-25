@@ -91,6 +91,10 @@
         {%- endif -%}
       </div>
       <div class="price__sale">
+        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
+        <span class="price-item price-item--sale price-item--last">
+          {{ money_price }}
+        </span>
         {%- unless product.price_varies == false and product.compare_at_price_varies %}
           <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.regular_price' | t }}</span>
           <span>
@@ -103,13 +107,12 @@
             </s>
           </span>
         {%- endunless -%}
-        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.price.sale_price' | t }}</span>
-        <span class="price-item price-item--sale price-item--last">
-          {{ money_price }}
-        </span>
       </div>
       {%- if product.selected_or_first_available_variant.unit_price_measurement -%}
-        {% render 'unit-price', price: product.selected_or_first_available_variant.unit_price, measurement: product.selected_or_first_available_variant.unit_price_measurement %}
+        {% render 'unit-price',
+          price: product.selected_or_first_available_variant.unit_price,
+          measurement: product.selected_or_first_available_variant.unit_price_measurement
+        %}
       {%- endif -%}
     </div>
     {%- if show_badges -%}
@@ -122,4 +125,105 @@
       </span>
     {%- endif -%}
   </div>
+  <div id="unit-price-label-container" class="unit-price-label-container">
+    <p id="unit-price-label" class="unit-price-label"></p>
+  </div>
+
+  <script>
+    (function() {
+      // Générer un objet JSON avec les metafields de tous les variants
+      const variantMetafields = {
+        {%- for variant in product.variants -%}
+          "{{ variant.id }}": "{{ variant.metafields.variant_info.unit_price_label | escape }}"{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      };
+
+      function getCurrentVariantId() {
+        // Try common selectors in order
+        const input = document.querySelector('input[name="id"]');
+        if (input && input.value) return String(input.value);
+        const select = document.querySelector('select[name="id"]');
+        if (select && select.value) return String(select.value);
+        if (window.Shopify && window.Shopify.ProductForm && window.Shopify.ProductForm.variantId) return String(window.Shopify.ProductForm.variantId);
+
+        // Look for active buttons/swatches with data-variant-id
+        const active = document.querySelector('[data-variant-id].is-active, [data-variant-id][aria-pressed="true"], [data-variant-id][aria-checked="true"], [data-variant-id].active');
+        if (active) return String(active.getAttribute('data-variant-id'));
+
+        return null;
+      }
+
+      function updateUnitPriceLabel(variantId) {
+        const unitPriceLabel = document.getElementById('unit-price-label');
+        const container = document.getElementById('unit-price-label-container');
+        if (!unitPriceLabel || !container) return;
+
+        const metafieldValue = variantMetafields[String(variantId)];
+        if (metafieldValue && metafieldValue.trim() !== '') {
+          unitPriceLabel.textContent = metafieldValue;
+          container.style.display = 'block';
+        } else {
+          unitPriceLabel.textContent = '';
+          container.style.display = 'none';
+        }
+      }
+
+      function onVariantChangeEvent(e) {
+        const idFromEvent = e && e.detail && e.detail.variant && e.detail.variant.id;
+        const id = idFromEvent || getCurrentVariantId();
+        if (id) updateUnitPriceLabel(id);
+      }
+
+      function initListeners() {
+        // Custom theme events
+        document.addEventListener('variant:change', onVariantChangeEvent);
+        document.addEventListener('on:variant:change', onVariantChangeEvent);
+
+        // Generic change on selects or inputs
+        document.addEventListener('change', function(e) {
+          if (!e || !e.target) return;
+          if (e.target.name === 'id' || e.target.closest('[name="id"]')) {
+            const id = getCurrentVariantId();
+            if (id) updateUnitPriceLabel(id);
+          }
+        });
+
+        // Clicks on swatches / buttons exposing data-variant-id
+        document.addEventListener('click', function(e) {
+          const btn = e.target.closest('[data-variant-id]');
+          if (btn) {
+            const id = btn.getAttribute('data-variant-id');
+            if (id) updateUnitPriceLabel(id);
+          }
+        });
+
+        // Observe the product form for DOM replacements (some themes re-render form)
+        const productForm = document.querySelector('form[action*="/cart/add"], form[data-product-form], form.product-form') || document.querySelector('form');
+        if (productForm) {
+          const mo = new MutationObserver(function() {
+            const id = getCurrentVariantId();
+            if (id) updateUnitPriceLabel(id);
+          });
+          mo.observe(productForm, { childList: true, subtree: true, attributes: true, attributeFilter: ['value'] });
+        }
+
+        // Poll briefly as a last resort for themes that set variant via JS property only
+        let checks = 0;
+        const poll = setInterval(function() {
+          const id = getCurrentVariantId();
+          if (id) {
+            updateUnitPriceLabel(id);
+            clearInterval(poll);
+          }
+          if (++checks > 50) clearInterval(poll);
+        }, 100);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initListeners);
+      } else {
+        initListeners();
+      }
+    })();
+  </script>
 {% endunless %}

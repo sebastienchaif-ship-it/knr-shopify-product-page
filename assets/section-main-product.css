@@ -335,7 +335,7 @@ a.product__text {
 }
 
 .product .price__container {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
 .product .price dl {
@@ -1248,7 +1248,7 @@ a.product__text {
   align-items: center;
   text-align: center;
   width: 100%;
-  font-size: 1.3rem;
+  font-size: 1.3rem;  
   margin-top: 1.8rem;
   color: #000;
   font-weight: 400;
