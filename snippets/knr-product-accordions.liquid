@@ -30,7 +30,7 @@
     {%- if detailed_description != blank -%}
       <details class="knr-product-accordion" open>
         <summary class="knr-product-accordion__summary">
-          <span>Description détaillée</span>
+          <span>{{ 'knr_product_accordions.detailed_description_title' | t }}</span>
           <span class="knr-product-accordion__icon">⌄</span>
         </summary>
         <div class="knr-product-accordion__content">
@@ -42,7 +42,7 @@
     {%- if benefits != blank -%}
       <details class="knr-product-accordion">
         <summary class="knr-product-accordion__summary">
-          <span>Bienfaits</span>
+          <span>{{ 'knr_product_accordions.benefits_title' | t }}</span>
           <span class="knr-product-accordion__icon">⌄</span>
         </summary>
         <div class="knr-product-accordion__content">
@@ -54,7 +54,7 @@
     {%- if key_ingredients != blank -%}
       <details class="knr-product-accordion">
         <summary class="knr-product-accordion__summary">
-          <span>Ingrédients clés</span>
+          <span>{{ 'knr_product_accordions.key_ingredients_title' | t }}</span>
           <span class="knr-product-accordion__icon">⌄</span>
         </summary>
         <div class="knr-product-accordion__content">
@@ -66,7 +66,7 @@
     {%- if skin_types != blank -%}
       <details class="knr-product-accordion">
         <summary class="knr-product-accordion__summary">
-          <span>Adapté aux peaux</span>
+          <span>{{ 'knr_product_accordions.skin_types_title' | t }}</span>
           <span class="knr-product-accordion__icon">⌄</span>
         </summary>
         <div class="knr-product-accordion__content">
@@ -91,9 +91,18 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 22px 0;
+      padding: 2.5rem 0;
       cursor: pointer;
       list-style: none;
+    }
+
+    .knr-product-accordion[open] .knr-product-accordion__summary {
+      padding: 2.5rem 0 0.9rem;
+    }
+
+    .knr-product-accordion__summary span {
+      font-size: 15px;
+      font-weight: 500;
     }
 
     .knr-product-accordion__summary::-webkit-details-marker {
@@ -104,12 +113,20 @@
       padding-bottom: 24px;
     }
 
+    .metafield-rich_text_field p {
+      padding: 0;
+      margin: 0;
+      line-height: 29px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
     .knr-product-accordion[open] .knr-product-accordion__icon {
       transform: rotate(180deg);
     }
 
     .knr-product-accordion__icon {
-      transition: transform 0.2s ease;
+      transition: Adapté aux peaux transform 0.2s ease;
     }
   </style>
   <script>

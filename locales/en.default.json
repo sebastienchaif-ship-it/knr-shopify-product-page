@@ -550,5 +550,11 @@
       "send_on": "YYYY-MM-DD",
       "send_on_label": "Send on (optional)"
     }
+  },
+  "knr_product_accordions": {
+    "detailed_description_title": "Detailed description",
+    "benefits_title": "Benefits",
+    "key_ingredients_title": "Key ingredients",
+    "skin_types_title": "Suitable for skin types"
   }
 }
