@@ -561,10 +561,12 @@
       "send_on_label": "Envoyer le (facultatif)",
       "expanded": "Formulaire de destinataire de carte-cadeau agrandi",
       "collapsed": "Formulaire de destinataire de carte-cadeau réduit"
-    }  },
+    }
+  },
   "knr_product_accordions": {
     "detailed_description_title": "Description",
     "benefits_title": "Bienfaits",
     "key_ingredients_title": "Ingrédients clés",
-    "skin_types_title": "Adapté aux peaux"  }
+    "skin_types_title": "Adapté aux peaux"
+  }
 }
