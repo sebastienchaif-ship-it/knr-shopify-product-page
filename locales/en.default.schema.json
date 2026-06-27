@@ -2539,6 +2539,9 @@
         "columns_desktop": {
           "label": "Columns"
         },
+        "knr_columns_number": {
+          "label": "Show column number"
+        },
         "column_alignment": {
           "label": "Column alignment",
           "options__1": {

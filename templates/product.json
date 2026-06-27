@@ -63,7 +63,7 @@
         "complementary_cmWEc7": {
           "type": "complementary",
           "settings": {
-            "block_heading": "S’associe bien avecComplétez votre rituel",
+            "block_heading": "Complétez votre rituel",
             "make_collapsible_row": true,
             "icon": "price_tag",
             "product_list_limit": 4,
@@ -100,7 +100,7 @@
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 0,
-        "padding_bottom": 12
+        "padding_bottom": 84
       }
     },
     "knr_statement_CHnLPe": {

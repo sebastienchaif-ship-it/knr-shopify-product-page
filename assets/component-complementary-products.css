@@ -86,7 +86,7 @@ product-recommendations.is-accordion + .accordion {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0 25px 0 3px;
+  padding: 0 15px 0 3px;
 }
 
 .complementary-products__container .card--horizontal .card__information .card-information {

@@ -29,32 +29,80 @@
 
   <div class="knr-what-customers__compare" id="knr-compare-{{ section.id }}" data-section-id="{{ section.id }}">
     <div class="knr-compare__wrap">
-      <img
-        class="knr-compare__before"
-        src="{{ section.settings.before_image | img_url: '1600x' }}"
-        alt="Before"
-        width="1600"
-        height="900"
-      >
-      <div class="knr-compare__after" style="width:50%">
-        <img src="{{ section.settings.after_image | img_url: '1600x' }}" alt="After" width="1600" height="900">
+      <div class="knr-compare__before">
+        <span class="knr-compare__name">Before</span>
+        <img
+          src="{{ section.settings.before_image | image_url: width: 1600 }}"
+          alt="Before"
+          width="{{ section.settings.before_image.width | default: 1600 }}"
+          height="{{ section.settings.before_image.height | default: 900 }}"
+        >
       </div>
-      <div class="knr-compare__handle" role="slider" aria-label="Before/after slider" tabindex="0"></div>
+      <div class="knr-compare__after">
+        <span class="knr-compare__name">After</span>
+        <img
+          src="{{ section.settings.after_image | image_url: width: 1600 }}"
+          alt="After"
+          width="{{ section.settings.after_image.width | default: 1600 }}"
+          height="{{ section.settings.after_image.height | default: 900 }}"
+        >
+      </div>
+      <div class="knr-compare__handle" role="slider" aria-label="Before/after slider" tabindex="0">
+        <span class="knr-compare__handle-core" aria-hidden="true">
+          <span class="knr-compare__handle-lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </span>
+      </div>
     </div>
   </div>
 
   <div class="knr-what-customers__reviews" style="text-align: {{ section.settings.text_alignment }};">
-    {% for block in section.blocks %}
-      <div class="knr-review" style="padding: {{ block.settings.item_spacing }}px;">
-        <div class="knr-review__rating">
-          {% for i in (1..block.settings.rating) -%}
-            ★
-          {%- endfor %}
-        </div>
-        <div class="knr-review__comment">{{ block.settings.comment }}</div>
-        <div class="knr-review__person">— {{ block.settings.person }}</div>
+    <slider-component class="knr-review-slider">
+      <div id="Slider-{{ section.id }}" class="knr-review-list slider slider--everywhere">
+        {% for block in section.blocks %}
+          <div
+            id="Slide-{{ block.id }}"
+            class="knr-review slider__slide"
+            style="padding: {{ block.settings.item_spacing }}px;"
+          >
+            <div class="knr-review__rating">
+              <span class="stars">
+                {%- for i in (1..block.settings.rating) -%}
+                  ★
+                {%- endfor -%}
+              </span>
+              <span class="knr-review__person">{{ block.settings.person }}</span>
+            </div>
+            <div class="knr-review__comment">{{ block.settings.comment }}</div>
+          </div>
+        {% endfor %}
       </div>
-    {% endfor %}
+      {% if section.blocks.size > 1 %}
+        <div class="slider-buttons knr-review-slider__controls">
+          <button
+            type="button"
+            class="slider-button"
+            name="previous"
+            aria-label="{{ 'general.slider.previous_slide' | t }}"
+          >
+            <span class="icon">
+              {{ 'icon-arrow-prev.svg' | inline_asset_content }}
+            </span>
+          </button>
+          <button
+            type="button"
+            class="slider-button"
+            name="next"
+            aria-label="{{ 'general.slider.next_slide' | t }}"
+          >
+            <span class="icon"> {{ 'icon-arrow-next.svg' | inline_asset_content }}</span>
+          </button>
+        </div>
+      {% endif %}
+    </slider-component>
   </div>
 
   {% if section.settings.width_mode == 'theme' %}
@@ -67,81 +115,201 @@
     }
     .knr-what-customers__header {
       text-align: center;
-      margin-bottom: 24px;
+      max-width: 53.5rem;
+      margin: 0 auto 4rem;
     }
     .knr-what-customers__title {
-      margin: 0 0 8px;
+      margin: 0 0 1.1rem;
+      font-size: 4rem;
+      font-weight: 400;
+      letter-spacing: -0.25px;
     }
     .knr-what-customers__description {
-      margin: 0 0 24px;
+      margin: 0 0 4rem;
       color: inherit;
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: 0.1px;
+      line-height: 2.2rem;
     }
     .knr-compare__wrap {
       position: relative;
       overflow: hidden;
       max-width: 100%;
-      margin: 0 auto 32px;
+      margin: 0 auto 3.2rem;
+      cursor: ew-resize;
+      min-height: 32rem;
+      height: 64rem;
     }
-    .knr-compare__wrap img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
+    .knr-compare__before,
     .knr-compare__after {
       position: absolute;
       top: 0;
-      left: 0;
+      width: 100%;
       height: 100%;
       overflow: hidden;
     }
+    .knr-compare__before {
+      left: 0;
+    }
+    .knr-compare__after {
+      right: 0;
+      left: 0;
+      z-index: 1;
+      overflow: hidden;
+      clip-path: inset(0 0 0 50%);
+    }
+    .knr-compare__before img,
     .knr-compare__after img {
-      display: block;
+      position: absolute;
+      inset: 0;
       width: 100%;
-      height: auto;
+      height: 168%;
+      object-fit: cover;
+      object-position: center center;
+      top: 61%;
+      transform: translateY(-50%);
+    }
+    .knr-compare__name {
+      position: absolute;
+      top: 3.5rem;
+      left: 4rem;
+      color: #000;
+      font-size: 1.3rem;
+      z-index: 1;
+      text-transform: uppercase;
+    }
+    .knr-compare__after .knr-compare__name {
+      right: 4.5rem;
+      left: initial;
     }
     .knr-compare__handle {
       position: absolute;
       top: 0;
       bottom: 0;
       left: 50%;
-      width: 4px;
-      margin-left: -2px;
-      background: rgba(255, 255, 255, 0.8);
+      width: 64px;
+      margin-left: -32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: ew-resize;
       z-index: 10;
+      touch-action: none;
+      pointer-events: auto;
     }
-    .knr-what-customers__reviews {
+    .knr-compare__handle::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: rgba(255, 255, 255, 1);
+      transform: translateX(-50%);
+    }
+    .knr-compare__handle-core {
+      position: relative;
+      width: 4.8rem;
+      height: 4.8rem;
+      background: #ffffff;
+      border-radius: 50%;
       display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+    .knr-compare__handle-lines {
+      display: flex;
+      gap: 0.3rem;
+      align-items: center;
       justify-content: center;
     }
+    .knr-compare__handle-lines span {
+      display: block;
+      width: 0.2rem;
+      height: 1.2rem;
+      background: #111111;
+    }
+    .knr-compare__handle:hover,
+    .knr-compare__handle:focus {
+      outline: none;
+    }
+    .knr-what-customers__reviews {
+      margin-top: 5rem;
+    }
+    .knr-review-slider {
+      max-width: 101rem;
+      margin: 0 auto;
+    }
+    .knr-review-slider .slider--everywhere {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .knr-review-list {
+      display: flex;
+      gap: 2rem;
+      scroll-snap-type: x mandatory;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 1rem;
+    }
+    .knr-review-list::-webkit-scrollbar {
+      display: none;
+    }
     .knr-review {
-      max-width: 720px;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 6px;
+      min-width: 100%;
+      max-width: 100%;
+      scroll-snap-align: start;
+      box-sizing: border-box;
+    }
+    .knr-review-slider__controls {
+      margin-top: 0;
+      gap: 2rem;
     }
     .knr-review__rating {
-      color: gold;
-      margin-bottom: 8px;
+      color: #b5a282;
+      margin-bottom: 3.5rem;
+      font-size: 1rem;
+    }
+    .knr-review__rating .stars {
+      font-size: 1.3rem;
+      padding-left: 1px;
     }
     .knr-review__comment {
-      font-size: 16px;
-      line-height: 1.4;
-      margin-bottom: 8px;
+      font-size: 3.2rem;
+      line-height: 4rem;
+      margin-bottom: 0.8rem;
+      font-weight: 400;
+      letter-spacing: -0.1px;
     }
     .knr-review__person {
-      font-weight: 600;
-      font-size: 14px;
+      padding-left: 0.1rem;
+      letter-spacing: -0.35px;
       color: inherit;
+    }
+    .knr-review-slider__controls .slider-button {
+      height: 4.5rem;
+    }
+    .knr-review-slider button.slider-button:disabled {
+      opacity: 0.25;
+      cursor: default;
+    }
+    .knr-review-slider button.slider-button svg {
+      transition: transform 0.2s ease, stroke 0.2s ease;
+    }
+    .knr-review-slider button.slider-button:not(:disabled):hover svg {
+      transform: scale(1.25);
+    }
+    .knr-review-slider button.slider-button:not(:disabled):hover svg path {
+      stroke: #b5a282;
     }
 
     @media (max-width: 749px) {
-      .knr-what-customers__reviews {
-        flex-direction: column;
-      }
-      .knr-review {
-        width: 100%;
+      .knr-review__comment {
+        font-size: 2rem;
+        line-height: 2.8rem;
       }
     }
   {%- endstyle -%}
@@ -158,7 +326,7 @@
       function setPos(x) {
         var rect = wrap.getBoundingClientRect();
         var pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
-        after.style.width = pct * 100 + '%';
+        after.style.clipPath = 'inset(0 0 0 ' + pct * 100 + '%)';
         handle.style.left = pct * 100 + '%';
       }
 
@@ -174,14 +342,31 @@
         if (dragging) setPos(e.clientX);
       });
 
-      handle.addEventListener('touchstart', function (e) {
-        dragging = true;
-      });
+      handle.addEventListener(
+        'touchstart',
+        function (e) {
+          dragging = true;
+          e.preventDefault();
+        },
+        { passive: false }
+      );
       window.addEventListener('touchend', function () {
         dragging = false;
       });
-      window.addEventListener('touchmove', function (e) {
-        if (dragging && e.touches && e.touches[0]) setPos(e.touches[0].clientX);
+      window.addEventListener(
+        'touchmove',
+        function (e) {
+          if (dragging && e.touches && e.touches[0]) {
+            e.preventDefault();
+            setPos(e.touches[0].clientX);
+          }
+        },
+        { passive: false }
+      );
+
+      wrap.addEventListener('click', function (e) {
+        if (e.target === handle) return;
+        setPos(e.clientX);
       });
 
       handle.addEventListener('keydown', function (e) {
@@ -207,7 +392,7 @@
       ],
       "default": "theme"
     },
-    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 4, "default": 40 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 200, "step": 2, "default": 40 },
     {
       "type": "range",
       "id": "padding_bottom",
@@ -217,15 +402,15 @@
       "step": 4,
       "default": 40
     },
-    { "type": "range", "id": "padding_left", "label": "Padding left", "min": 0, "max": 200, "step": 4, "default": 20 },
+    { "type": "range", "id": "padding_left", "label": "Padding left", "min": 0, "max": 200, "step": 2, "default": 30 },
     {
       "type": "range",
       "id": "padding_right",
       "label": "Padding right",
       "min": 0,
       "max": 200,
-      "step": 4,
-      "default": 20
+      "step": 2,
+      "default": 30
     },
     { "type": "color", "id": "background_color", "label": "Background color", "default": "#ffffff" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#111111" },

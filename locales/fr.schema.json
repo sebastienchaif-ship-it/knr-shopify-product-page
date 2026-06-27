@@ -2228,6 +2228,9 @@
         "columns_desktop": {
           "label": "Colonnes"
         },
+        "knr_columns_number": {
+          "label": "Afficher le numéro de colonne"
+        },
         "header_mobile": {
           "content": "Mise en page sur mobile"
         },

@@ -21,7 +21,7 @@
 
       <div
         class="knr-statement__right"
-        style="flex: 1 1 60%; text-align: {{ section.settings.text_position }}; max-width: {% if section.settings.text_width == 'narrow' %}480px{% elsif section.settings.text_width == 'medium' %}720px{% else %}100%{% endif %}; margin-left: auto;"
+        style="flex: 1 1 60%; text-align: {{ section.settings.text_position }};margin-left: auto;"
       >
         {% if section.settings.message != blank %}
           <div class="knr-statement__message">{{ section.settings.message }}</div>
@@ -36,8 +36,21 @@
 
   {%- style -%}
     .knr-statement {
+      .page-width {
+        width: 100%;
+        @media screen and (min-width: 750px) {
+          padding: 0 1.5rem;
+        }
+      }
+    }
+    .knr-statement {
       position: relative;
       overflow: hidden;
+    }
+    .knr-statement__left {
+    }
+    .knr-statement__right {
+      max-width: {% if section.settings.text_width == 'narrow' %}50.5rem{% elsif section.settings.text_width == 'medium' %}720px{% else %}100%{% endif %};
     }
     .knr-statement::before {
       content: '';
@@ -53,6 +66,9 @@
       background: rgba(0, 0, 0, 0.4);
       z-index: 1;
     }
+    .knr-statement__overlay:empty {
+      display: block;
+    }
     .knr-statement__inner-row {
       position: relative;
       z-index: 2;
@@ -62,23 +78,43 @@
     }
     .knr-statement__eyebrow {
       font-weight: 600;
-      text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 0;
+      margin-top: .2rem;
+      font-size: 1.2rem;
+      letter-spacing: 0;
+      /* Respect de la maquette.
+        À titre personnel, j'aurais privilégié une couleur offrant un meilleur contraste
+        afin d'améliorer l'accessibilité et la lisibilité du texte. */
+      /* color: #7b7b7b; */
+    }
+    .knr-statement__eyebrow::after {
+      content: '';
+      display: block;
+      width: 1.6rem;
+      height: .2rem;
+      margin-top: .6rem;
+      background: currentColor;
     }
     .knr-statement__message {
-      font-size: 20px;
-      line-height: 1.4;
-      margin-bottom: 12px;
+      font-size: 3.2rem;
+      line-height: 4rem;
+      margin-bottom: 0;
+      text-align: left;
+      font-weight: 400;
+      letter-spacing: 0;
+      margin-top: .6rem;
     }
     .knr-statement__author {
       font-weight: 700;
+      font-size: .9rem;
+      margin-top: 1.3rem;
     }
   {%- endstyle -%}
 
   <style>
     #knr-statement-{{ section.id }} { padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; display:flex; flex-direction:column; }
     #knr-statement-{{ section.id }}::before { {% if section.settings.background_image != blank %} background-image: url({{ section.settings.background_image | img_url: 'master' }}); {% else %} background: transparent; {% endif %} }
-    #knr-statement-{{ section.id }} .knr-statement__overlay { background: rgba(0,0,0, {{ section.settings.overlay_opacity | divided_by: 100.0 }}); }
+    #knr-statement-{{ section.id }} .knr-statement__overlay { background: linear-gradient(90deg, rgba(205, 205, 205, {{ section.settings.overlay_opacity | divided_by: 100.0 }}) 0%, rgba(255, 255, 255, 0) 53%);}
     #knr-statement-{{ section.id }} .knr-statement__inner-row { min-height: {{ section.settings.min_height_desktop }}px; }
     @media (max-width: 749px) {
       #knr-statement-{{ section.id }} .knr-statement__inner-row { min-height: {{ section.settings.min_height_mobile }}px; }
