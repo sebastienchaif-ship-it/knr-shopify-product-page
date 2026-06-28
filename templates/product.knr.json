@@ -1,0 +1,45 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "enable_sticky_info": false,
+        "color_scheme": "scheme-1",
+        "media_size": "full",
+        "constrain_to_viewport": false,
+        "media_fit": "contain",
+        "gallery_layout": "stacked",
+        "mobile_thumbnails": "show",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 0,
+        "padding_bottom": 84
+      }
+    },
+    "knr_customer_reviews": {
+      "type": "knr-customer-reviews",
+      "settings": {
+        "width_mode": "theme",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "background_color": "#ffffff",
+        "text_color": "#111111",
+        "title": "Avis clients",
+        "subtitle": "Trouvez les retours récents de nos clientes et posez vos questions directement depuis cette section.",
+        "show_write_review_button": true,
+        "write_review_label": "Écrire un avis",
+        "show_ask_question_button": true,
+        "ask_question_label": "Poser une question",
+        "show_filters": true,
+        "initial_review_count": "3",
+        "load_more_count": "3"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "knr_customer_reviews"
+  ]
+}

@@ -20,6 +20,10 @@
           "type": "title",
           "settings": {}
         },
+        "judge_me_reviews_preview_badge_VyBrDE": {
+          "type": "shopify:\/\/apps\/judge-me-reviews\/blocks\/preview_badge\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {}
+        },
         "knr_product_scores_FDqd8F": {
           "type": "knr_product_scores",
           "settings": {}
@@ -58,10 +62,12 @@
         },
         "knr_product_accordions_EVzn8L": {
           "type": "knr_product_accordions",
+          "disabled": true,
           "settings": {}
         },
         "complementary_cmWEc7": {
           "type": "complementary",
+          "disabled": true,
           "settings": {
             "block_heading": "Complétez votre rituel",
             "make_collapsible_row": true,
@@ -78,6 +84,7 @@
         "knr_breadcrumb_J6FF9h",
         "knr_product_labels_z8KWiN",
         "title",
+        "judge_me_reviews_preview_badge_VyBrDE",
         "knr_product_scores_FDqd8F",
         "description",
         "variant_picker",
@@ -161,6 +168,7 @@
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
+        "custom_class": "knr-how-to-use",
         "title": "How to use",
         "heading_size": "h2",
         "image_width": "full",
@@ -168,13 +176,14 @@
         "button_label": "",
         "button_link": "",
         "columns_desktop": 3,
+        "knr_columns_number": true,
         "column_alignment": "left",
         "background_style": "primary",
         "color_scheme": "scheme-1",
         "columns_mobile": "1",
         "swipe_on_mobile": false,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
     "knr_what_customers_say_HFnVkn": {
@@ -185,25 +194,35 @@
           "settings": {
             "rating": 5,
             "person": "Clara T.",
-            "comment": "J'utilise ce sérum depuis trois mois et la différence est saisissante.",
+            "comment": "J'utilise ce sérum depuis trois mois et la différence est saisissante. Mes rides d'expression se sont considérablement atténuées et mon teint a retrouvé une luminosité que je n'avais plus depuis des années. Une texture soyeuse qui pénètre instantanément. Je ne peux plus m'en passer.",
+            "item_spacing": 24
+          }
+        },
+        "review_NcBRYV": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "person": "Clara T.",
+            "comment": "J'utilise ce sérum depuis trois mois et la différence est saisissante. Mes rides d'expression se sont considérablement atténuées et mon teint a retrouvé une luminosité que je n'avais plus depuis des années. Une texture soyeuse qui pénètre instantanément. Je ne peux plus m'en passer.",
             "item_spacing": 24
           }
         }
       },
       "block_order": [
-        "review_JEKECY"
+        "review_JEKECY",
+        "review_NcBRYV"
       ],
       "name": "Ce que disent nos clients",
       "settings": {
         "width_mode": "theme",
-        "padding_top": 40,
-        "padding_bottom": 40,
-        "padding_left": 20,
-        "padding_right": 20,
-        "background_color": "#ffffff",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "padding_left": 30,
+        "padding_right": 30,
+        "background_color": "#f9f8f5",
         "text_color": "#111111",
         "title": "Ce que disent nos clientes",
-        "description": "Des transformations visibles dès 4 semaines. Nos clientes témoignent d'une peau visiblement régénérée.",
+        "description": "Des transformations visibles dès 4 semaines. Nos clientes témoignent d'une peau visiblement régénérée, plus ferme et lumineuse.",
         "before_image": "shopify:\/\/shop_images\/897766d4a5625fbe47da1a9c8df1e8f9b3f4442a_1.jpg",
         "after_image": "shopify:\/\/shop_images\/897766d4a5625fbe47da1a9c8df1e8f9b3f4442a_1.jpg",
         "text_alignment": "center"
@@ -225,10 +244,11 @@
       "blocks": {
         "collapsible_row_UKBpMz": {
           "type": "collapsible_row",
+          "repeater": "{{ product.metafields.product_info.faqs_liaison.value }}",
           "settings": {
-            "heading": "{{ metaobjects.faq_item[\"comment-utiliser\"].question.value }}",
-            "icon": "none",
-            "row_content": "{{ metaobjects.faq_item[\"comment-utiliser\"].reponse | metafield_tag }}",
+            "heading": "{{ block.repeater.question.value }}",
+            "icon": "check_mark",
+            "row_content": "{{ block.repeater.reponse | metafield_tag }}",
             "page": ""
           }
         }
@@ -248,8 +268,8 @@
         "open_first_collapsible_row": false,
         "image_ratio": "adapt",
         "desktop_layout": "image_second",
-        "padding_top": 72,
-        "padding_bottom": 72
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
     "featured_blog_mEUXFp": {
@@ -269,6 +289,26 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "1782597785fd94d130": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_iBUKH6": {
+          "type": "shopify:\/\/apps\/judge-me-reviews\/blocks\/review_widget\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_iBUKH6"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
@@ -279,6 +319,7 @@
     "knr_what_customers_say_HFnVkn",
     "disclosures",
     "collapsible_content_bKNeHz",
-    "featured_blog_mEUXFp"
+    "featured_blog_mEUXFp",
+    "1782597785fd94d130"
   ]
 }
