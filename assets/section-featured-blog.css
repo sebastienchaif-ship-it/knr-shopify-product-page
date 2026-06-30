@@ -1,3 +1,9 @@
+@media screen and (min-width: 990px) {
+  .blog .page-width-desktop {
+    padding: 0 4rem;
+  }
+}
+
 .blog-placeholder-svg {
   height: 100%;
 }
@@ -12,13 +18,20 @@
   margin: 0;
 }
 
+.blog__title.h2 {
+  font-size: 3.2rem;
+  line-height: 4rem;
+  letter-spacing: -1.28px;
+  font-weight: 400;
+}
+
 .blog__posts.articles-wrapper {
-  margin-bottom: 1rem;
+  margin: 0;
 }
 
 @media screen and (min-width: 990px) {
   .blog__posts.articles-wrapper {
-    margin-bottom: 0;
+    margin: 0;
   }
 }
 
@@ -38,6 +51,10 @@
 
 .blog__posts .card-wrapper {
   width: 100%;
+}
+
+.blog__posts .card-wrapper .card .card__inner {
+  --ratio-percent: 100% !important;
 }
 
 .blog__button {

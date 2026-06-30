@@ -678,7 +678,7 @@ summary {
 
 summary .icon-caret {
   position: absolute;
-  height: 0.6rem;
+  height: 0.8rem;
   right: 1.5rem;
   top: calc(50% - 0.2rem);
 }
@@ -791,7 +791,7 @@ summary::-webkit-details-marker {
 /* component-title */
 .title,
 .title-wrapper-with-link {
-  margin: 3rem 0 2rem;
+  margin: 3rem 0 4rem;
 }
 
 .title-wrapper-with-link .title {
@@ -2349,8 +2349,19 @@ input[type='checkbox'] {
 .knr-product-template .section-header.shopify-section-group-header-group {
   position: fixed;
   width: 100%;
-  top: 3.2rem;
+  top: 0;
+  transform: translateY(3.2rem);
+  background: transparent;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.24s ease, box-shadow 0.24s ease;
+  will-change: transform;
   z-index: 3;
+}
+
+.knr-product-template .section-header.shopify-section-group-header-group.shopify-section-header-sticky {
+  transform: translateY(0);
+  background: #000000;
+  box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.2);
+  z-index: 9999;
 }
 
 .shopify-section-header-sticky {
@@ -2367,7 +2378,7 @@ input[type='checkbox'] {
 }
 
 .section-header.animate {
-  transition: top 0.15s ease-out;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.24s ease, box-shadow 0.24s ease;
 }
 
 .shopify-section-group-header-group {

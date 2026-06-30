@@ -461,6 +461,10 @@ a.product__text {
   border-radius: calc(var(--media-radius) - var(--media-border-width));
 }
 
+.product .product__media-wrapper .product__media-list.grid {
+  margin-bottom: 0;
+}
+
 @media screen and (max-width: 749px) {
   .product__media-list {
     margin-left: -2.5rem;
@@ -605,11 +609,8 @@ a.product__text {
 
 @media screen and (min-width: 990px) {
   .product--stacked .product__media-item {
-    max-width: 100%;
+    width: 32.8%;
     max-width: 46.6rem;
-  }
-  .product .product__media-list > .product__media-item:nth-child(4) {
-    opacity: 0;
   }
 
   .product:not(.product--columns) .product__media-list .product__media-item:first-child,

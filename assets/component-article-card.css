@@ -47,13 +47,39 @@
 }
 
 .article-card .card__heading {
-  margin-bottom: 0.6rem;
+  display: block;
+  width: 100%;
+  max-width: 19rem;
+  margin: 1.6rem 0;
+}
+
+.article-card .card__heading.h2 {
+  font-size: 2.4rem;
+  line-height: 3.2rem;
+  letter-spacing: -0.96px;
+  font-weight: 400;
 }
 
 .blog-articles .article-card .card__information,
 .blog__posts .article-card .card__information {
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding: 1.6rem 1.5rem 0 0;
+}
+
+.article-tag {
+  font-size:1.2rem;
+  line-height: 2rem;
+  letter-spacing: -0.24px;
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.article-tag::after {
+  content:'';
+  width:1.6rem;
+  height: 0.8px;
+  display:block;
+  background-color: #B5A282;
+  margin-top: 0.88rem;
 }
 
 .article-card__info {
@@ -75,7 +101,12 @@
 
 .article-card__excerpt {
   width: 100%;
-  margin-top: 1.2rem;
+  margin-top: 1.6rem;
+  margin-bottom: 0;
+  font-size: 1.4rem;
+  line-height: 2.2rem;
+  letter-spacing: -0.24px;
+  font-weight: 400;
 }
 
 .article-card__link:not(:only-child) {

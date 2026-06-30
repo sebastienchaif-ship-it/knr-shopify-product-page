@@ -1,7 +1,7 @@
 .multicolumn.knr-how-to-use .page-width {
   @media screen and (min-width: 750px) {
-    padding-left: 4.2rem;
-    padding-right: 4.2rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
   }
 }
 
@@ -245,7 +245,9 @@
 
 .multicolumn.knr-how-to-use .title {
   font-weight: 400;
-  font-size: 32px;
+  font-size: 3.2rem;
+  line-height: 4rem;
+  letter-spacing: -1.28px;
 }
 
 .multicolumn.knr-how-to-use.background-primary .multicolumn-card {
@@ -258,24 +260,27 @@
 }
 
 .multicolumn.knr-how-to-use .multicolumn-card__info {
-    padding: 1.7rem .5rem 1.7rem 2rem;
+    padding: 2.4rem;
 }
 
-.multicolumn.knr-how-to-use .multicolumn-card__info>:nth-child(2) {
-  margin-top: .8rem;
+.multicolumn.knr-how-to-use .multicolumn-card__info> .number {
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.4rem;
+  letter-spacing: 0.56px;
+  text-transform: uppercase;
 }
 
 .multicolumn.knr-how-to-use .multicolumn-list h3 {
-  font-size: 2.3rem;
+  font-size: 2.4rem;
   font-weight: 400;
-  margin-bottom: 1rem;
-  letter-spacing: .38px;
+  letter-spacing: 0.48px;
+  margin: 1.6rem 0;
 }
 
 .multicolumn.knr-how-to-use .metafield-rich_text_field p {
-  line-height: 2.2rem;
   font-size: 1.4rem;
-  margin-top: 1.3rem;
-  letter-spacing: -0.37px;
-  font-weight: 500;
+  line-height: 2.2rem;
+  letter-spacing: -0.28px;
+  font-weight: 400;
 }
