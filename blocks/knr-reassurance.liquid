@@ -1,0 +1,461 @@
+{% style %}
+  .knr-reassurance {
+    display: block;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.section_padding }}px 20px 78px;
+    margin:{{ block.settings.section_margin_top }}px  0 {{ block.settings.section_margin_bottom }}px;
+    font-family: Inter, sans-serif;
+  }
+
+  .knr-reassurance__container {
+    max-width: {{ block.settings.container_width }}px;
+    margin: 0 auto;
+  }
+
+  .knr-reassurance__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: {{ block.settings.items_spacing }}px;
+  }
+
+  .knr-reassurance__item {
+    display: flex;
+    flex-direction: column;
+    align-items: {% if block.settings.text_alignment == 'left' %}flex-start{% elsif block.settings.text_alignment == 'right' %}flex-end{% else %}center{% endif %};
+    text-align: {{ block.settings.text_alignment }};
+    gap: {{ block.settings.content_spacing }}px;
+    padding: 1rem .5rem 0 .5rem;
+    max-width: 16rem;
+    margin: 0 auto;
+  }
+
+  .knr-reassurance__icon {
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    flex-shrink: 0;
+  }
+
+  .knr-reassurance__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .knr-reassurance__icon-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+
+  .knr-reassurance__icon-placeholder svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .knr-reassurance__content {
+    display: flex;
+    flex-direction: column;
+    gap: {{ block.settings.text_spacing }}px;
+  }
+
+  .knr-reassurance__title {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 400;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.125px;
+  }
+
+  .knr-reassurance__text {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.text_color }};
+    margin: 0;
+    line-height: 2rem;
+    padding: 0;
+    letter-spacing: -0.125px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .knr-reassurance__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstyle %}
+
+<div class="knr-reassurance" {{ block.shopify_attributes }}>
+  <div class="knr-reassurance__container">
+    <div class="knr-reassurance__grid">
+      {% for i in (1..6) %}
+        {% liquid
+          assign enabled_key = 'item_' | append: i | append: '_enabled'
+          assign icon_key = 'item_' | append: i | append: '_icon'
+          assign title_key = 'item_' | append: i | append: '_title'
+          assign description_key = 'item_' | append: i | append: '_description'
+
+          assign item_enabled = block.settings[enabled_key]
+          assign item_icon = block.settings[icon_key]
+          assign item_title = block.settings[title_key]
+          assign item_description = block.settings[description_key]
+        %}
+
+        {% if item_enabled %}
+          <div class="knr-reassurance__item">
+            {% if item_icon %}
+              <div class="knr-reassurance__icon">
+                <img
+                  src="{{ item_icon | image_url: width: 200 }}"
+                  alt="{{ item_title | escape }}"
+                  loading="lazy"
+                  width="200"
+                  height="200"
+                >
+              </div>
+            {% endif %}
+            <div class="knr-reassurance__content">
+              {% if item_title != blank %}
+                <h3 class="knr-reassurance__title">{{ item_title }}</h3>
+              {% endif %}
+              {% if item_description != blank %}
+                <p class="knr-reassurance__text">{{ item_description | newline_to_br }}</p>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "KNR reassurance",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Mise en page"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Largeur du conteneur",
+      "min": 800,
+      "max": 1600,
+      "step": 25,
+      "unit": "px",
+      "default": 1225
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Espacement vertical",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 68
+    },
+    {
+      "type": "range",
+      "id": "items_spacing",
+      "label": "Espacement entre items",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_margin_top",
+      "label": "Marge superieure",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 58
+    },
+    {
+      "type": "range",
+      "id": "section_margin_bottom",
+      "label": "Marge inferieure",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Alignement du texte",
+      "options": [
+        {
+          "value": "left",
+          "label": "Gauche"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Droite"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Couleur de fond",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Couleur du texte",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Icone"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Taille de l'icone",
+      "min": 30,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Espacement du contenu"
+    },
+    {
+      "type": "range",
+      "id": "content_spacing",
+      "label": "Espacement icone/contenu",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "text_spacing",
+      "label": "Espacement titre/texte",
+      "min": 4,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "header",
+      "content": "Typographie"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Taille du titre",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Taille de la description",
+      "min": 10,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Item 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_1_enabled",
+      "label": "Activer l'item 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "item_1_icon",
+      "label": "Icone"
+    },
+    {
+      "type": "text",
+      "id": "item_1_title",
+      "label": "Titre",
+      "default": "Livraison gratuite"
+    },
+    {
+      "type": "textarea",
+      "id": "item_1_description",
+      "label": "Description",
+      "default": "Pour toute commande superieure a 50EUR"
+    },
+    {
+      "type": "header",
+      "content": "Item 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_2_enabled",
+      "label": "Activer l'item 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "item_2_icon",
+      "label": "Icone"
+    },
+    {
+      "type": "text",
+      "id": "item_2_title",
+      "label": "Titre",
+      "default": "Paiement securise"
+    },
+    {
+      "type": "textarea",
+      "id": "item_2_description",
+      "label": "Description",
+      "default": "Transactions 100% securisees"
+    },
+    {
+      "type": "header",
+      "content": "Item 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_3_enabled",
+      "label": "Activer l'item 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "item_3_icon",
+      "label": "Icone"
+    },
+    {
+      "type": "text",
+      "id": "item_3_title",
+      "label": "Titre",
+      "default": "Retours gratuits"
+    },
+    {
+      "type": "textarea",
+      "id": "item_3_description",
+      "label": "Description",
+      "default": "Sous 30 jours"
+    },
+    {
+      "type": "header",
+      "content": "Item 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_4_enabled",
+      "label": "Activer l'item 4",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "item_4_icon",
+      "label": "Icone"
+    },
+    {
+      "type": "text",
+      "id": "item_4_title",
+      "label": "Titre",
+      "default": "Service client"
+    },
+    {
+      "type": "textarea",
+      "id": "item_4_description",
+      "label": "Description",
+      "default": "Disponible 7j/7"
+    },
+    {
+      "type": "header",
+      "content": "Item 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_5_enabled",
+      "label": "Activer l'item 5",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "item_5_icon",
+      "label": "Icone"
+    },
+    {
+      "type": "text",
+      "id": "item_5_title",
+      "label": "Titre",
+      "default": "Garantie qualite"
+    },
+    {
+      "type": "textarea",
+      "id": "item_5_description",
+      "label": "Description",
+      "default": "Produits certifies"
+    },
+    {
+      "type": "header",
+      "content": "Item 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_6_enabled",
+      "label": "Activer l'item 6",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "item_6_icon",
+      "label": "Icone"
+    },
+    {
+      "type": "text",
+      "id": "item_6_title",
+      "label": "Titre",
+      "default": "Fabrication francaise"
+    },
+    {
+      "type": "textarea",
+      "id": "item_6_description",
+      "label": "Description",
+      "default": "Made in France"
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR reassurance"
+    }
+  ]
+}
+{% endschema %}

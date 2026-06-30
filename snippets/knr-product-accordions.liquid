@@ -78,31 +78,33 @@
 
   <style>
     .knr-product-accordions {
-      border-top: 1px solid rgba(0, 0, 0, 0.2);
-      margin-top: 7.4rem;
+      border-top: 0.8px solid rgba(0, 0, 0, 0.24);
+      margin-top: 5.6rem;
     }
 
     .knr-product-accordion {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      border-bottom: 0.8px solid rgba(0, 0, 0, 0.24);
     }
 
     .knr-product-accordion__summary {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      padding: 2.5rem 0;
+      gap: 1.6rem;
+      padding: 2rem 0;
       cursor: pointer;
       list-style: none;
     }
 
     .knr-product-accordion[open] .knr-product-accordion__summary {
-      padding: 2.5rem 0 0.9rem;
+      padding: 2rem 0 0.8rem;
     }
 
     .knr-product-accordion__summary span {
-      font-size: 15px;
+      font-size: 1.2rem;
       font-weight: 500;
+      line-height: 2rem;
+      letter-spacing: -0.24px;
     }
 
     .knr-product-accordion__summary::-webkit-details-marker {
@@ -110,23 +112,37 @@
     }
 
     .knr-product-accordion__content {
-      padding-bottom: 24px;
+      padding-bottom: 2rem;
     }
 
     .metafield-rich_text_field p {
       padding: 0;
       margin: 0;
-      line-height: 29px;
-      font-size: 15px;
-      font-weight: 500;
+      font-size: 1.2rem;
+      line-height: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.24px;
+    }
+
+    .metafield-rich_text_field ul {
+      margin: 0;
+      font-size: 1.2rem;
+      line-height: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.24px;
     }
 
     .knr-product-accordion[open] .knr-product-accordion__icon {
       transform: rotate(180deg);
+      top: 0.6rem;
     }
 
     .knr-product-accordion__icon {
-      transition: Adapté aux peaux transform 0.2s ease;
+      font-size: 2.8rem !important;
+      letter-spacing: 0 !important;
+      position: relative;
+      top: -0.7rem;
+      transition: 0.2s ease;
     }
   </style>
   <script>

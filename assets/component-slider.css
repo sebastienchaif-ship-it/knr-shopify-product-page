@@ -5,6 +5,7 @@ slider-component {
   );
   position: relative;
   display: block;
+  overflow: hidden;
 }
 
 slider-component.slider-component-full-width {

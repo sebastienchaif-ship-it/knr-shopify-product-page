@@ -1,0 +1,512 @@
+{% style %}
+  .knr-footer-bottom {
+    display: block;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+    font-family: Inter, sans-serif;
+    padding: 32px 20px;
+    border-top: solid 1px #DCD5C3;
+  }
+
+  .knr-footer-bottom__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .knr-footer-bottom__column {
+    display: flex;
+    align-items: center;
+  }
+
+  .knr-footer-bottom__column--left {
+    justify-content: flex-start;
+  }
+
+  .knr-footer-bottom__column--center {
+    justify-content: center;
+  }
+
+  .knr-footer-bottom__column--right {
+    justify-content: flex-end;
+  }
+
+  .knr-footer-bottom__selectors {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding-left: .7rem;
+  }
+
+  .knr-footer-bottom__selector {
+    position: relative;
+  }
+
+  .knr-footer-bottom__selector select {
+    padding: 8px 30px 8px 12px;
+    border: none;
+    border-radius: 0;
+    background-color: {{ block.settings.selector_background_color }};
+    color: {{ block.settings.selector_text_color }};
+    font-size: {{ block.settings.selector_font_size }}px;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .knr-footer-bottom__selector::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid {{ block.settings.selector_text_color }};
+    pointer-events: none;
+  }
+
+  .knr-footer-bottom__copyright {
+    color: {{ block.settings.copyright_text_color }};
+    font-size: {{ block.settings.copyright_font_size }}px;
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .knr-footer-bottom__social {
+    display: flex;
+    gap: {{ block.settings.social_icon_spacing }}px;
+    align-items: center;
+  }
+
+  .knr-footer-bottom__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: {{ block.settings.social_icon_size }}px;
+    height: {{ block.settings.social_icon_size }}px;
+    color: {{ block.settings.social_icon_color }};
+    transition: color 0.3s ease;
+  }
+
+  .knr-footer-bottom__social-link:hover {
+    color: {{ block.settings.social_icon_hover_color }};
+  }
+
+  .knr-footer-bottom__social-link svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media screen and (max-width: 749px) {
+    .knr-footer-bottom__container {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .knr-footer-bottom__column--left,
+    .knr-footer-bottom__column--right,
+    .knr-footer-bottom__selectors,
+    .knr-footer-bottom__social {
+      justify-content: center;
+    }
+  }
+{% endstyle %}
+
+<div class="knr-footer-bottom" {{ block.shopify_attributes }}>
+  <div class="knr-footer-bottom__container">
+    <div class="knr-footer-bottom__column knr-footer-bottom__column--left">
+      <div class="knr-footer-bottom__selectors">
+        {% if block.settings.show_currency_selector %}
+          <div class="knr-footer-bottom__selector">
+            {% form 'currency' %}
+              <select name="currency" aria-label="Selecteur de devise">
+                {% for currency in shop.enabled_currencies %}
+                  {% liquid
+                    assign currency_country = currency.iso_code
+                    case currency.iso_code
+                      when 'EUR'
+                        assign currency_country = 'France'
+                      when 'USD'
+                        assign currency_country = 'Etats-Unis'
+                      when 'GBP'
+                        assign currency_country = 'Royaume-Uni'
+                      when 'CHF'
+                        assign currency_country = 'Suisse'
+                    endcase
+                  %}
+                  <option
+                    value="{{ currency.iso_code }}"
+                    {% if currency == cart.currency %}
+                      selected
+                    {% endif %}
+                  >
+                    {{ currency_country }} ({{ currency.symbol }})
+                  </option>
+                {% endfor %}
+              </select>
+            {% endform %}
+          </div>
+        {% endif %}
+
+        {% if block.settings.show_language_selector and shop.published_locales.size > 1 %}
+          <div class="knr-footer-bottom__selector">
+            {% form 'localization' %}
+              <select name="locale_code" aria-label="Selecteur de langue">
+                {% for locale in shop.published_locales %}
+                  <option
+                    value="{{ locale.iso_code }}"
+                    {% if locale == request.locale %}
+                      selected
+                    {% endif %}
+                  >
+                    {{ locale.endonym_name }}
+                  </option>
+                {% endfor %}
+              </select>
+            {% endform %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="knr-footer-bottom__column knr-footer-bottom__column--center">
+      {% if block.settings.copyright_text != blank %}
+        <div class="knr-footer-bottom__copyright">
+          {{ block.settings.copyright_text }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="knr-footer-bottom__column knr-footer-bottom__column--right">
+      <div class="knr-footer-bottom__social">
+        {% if settings.social_facebook_link != blank %}
+          <a
+            href="{{ settings.social_facebook_link }}"
+            class="knr-footer-bottom__social-link"
+            target="_blank"
+            rel="noopener"
+            aria-label="Facebook"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+          </a>
+        {% endif %}
+
+        {% if settings.social_instagram_link != blank %}
+          <a
+            href="{{ settings.social_instagram_link }}"
+            class="knr-footer-bottom__social-link"
+            target="_blank"
+            rel="noopener"
+            aria-label="Instagram"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+        {% endif %}
+
+        {% if settings.social_twitter_link != blank %}
+          <a
+            href="{{ settings.social_twitter_link }}"
+            class="knr-footer-bottom__social-link"
+            target="_blank"
+            rel="noopener"
+            aria-label="Twitter"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+            </svg>
+          </a>
+        {% endif %}
+
+        {% if settings.social_youtube_link != blank %}
+          <a
+            href="{{ settings.social_youtube_link }}"
+            class="knr-footer-bottom__social-link"
+            target="_blank"
+            rel="noopener"
+            aria-label="YouTube"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+              <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+            </svg>
+          </a>
+        {% endif %}
+
+        {% if settings.social_tiktok_link != blank %}
+          <a
+            href="{{ settings.social_tiktok_link }}"
+            class="knr-footer-bottom__social-link"
+            target="_blank"
+            rel="noopener"
+            aria-label="TikTok"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"></path>
+            </svg>
+          </a>
+        {% endif %}
+
+        {% if settings.social_pinterest_link != blank %}
+          <a
+            href="{{ settings.social_pinterest_link }}"
+            class="knr-footer-bottom__social-link"
+            target="_blank"
+            rel="noopener"
+            aria-label="Pinterest"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M8.5 14.5c.5 2 2 3.5 4.5 3.5 4 0 6-3 6-6.5 0-3-2-5.5-5-5.5-3.5 0-6 2.5-6 6 0 1.5.5 2.5 1.5 3"></path>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var wrappers = document.querySelectorAll('.knr-footer-bottom');
+    wrappers.forEach(function (wrapper) {
+      var currencyForms = wrapper.querySelectorAll('form[action*="currency"]');
+      currencyForms.forEach(function (form) {
+        var select = form.querySelector('select[name="currency"]');
+        if (!select) return;
+        select.addEventListener('change', function () {
+          form.submit();
+        });
+      });
+
+      var localeForms = wrapper.querySelectorAll('form[action*="localization"]');
+      localeForms.forEach(function (form) {
+        var select = form.querySelector('select[name="locale_code"]');
+        if (!select) return;
+        select.addEventListener('change', function () {
+          form.submit();
+        });
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "KNR footer bottom",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Selecteurs"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_currency_selector",
+      "label": "Afficher le selecteur de devise",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language_selector",
+      "label": "Afficher le selecteur de langue",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "selector_background_color",
+      "label": "Couleur de fond des selecteurs",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "selector_text_color",
+      "label": "Couleur du texte des selecteurs",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "selector_border_color",
+      "label": "Couleur de bordure des selecteurs",
+      "default": "#cccccc"
+    },
+    {
+      "type": "range",
+      "id": "selector_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Rayon de bordure des selecteurs",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "selector_font_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille de police des selecteurs",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Copyright"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Texte de copyright",
+      "default": "© 2026 Votre boutique. Tous droits reserves."
+    },
+    {
+      "type": "color",
+      "id": "copyright_text_color",
+      "label": "Couleur du texte",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "copyright_font_size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Taille de police",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Reseaux sociaux"
+    },
+    {
+      "type": "paragraph",
+      "content": "Les liens des reseaux sociaux sont configures dans les parametres du theme"
+    },
+    {
+      "type": "range",
+      "id": "social_icon_size",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Taille des icones",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "social_icon_spacing",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "label": "Espacement entre les icones",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "social_icon_color",
+      "label": "Couleur des icones",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "social_icon_hover_color",
+      "label": "Couleur des icones au survol",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Style general"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Couleur de fond",
+      "default": "#f3f3f3"
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Espacement vertical",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Espacement horizontal",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "label": "Largeur maximale",
+      "default": 1400
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR footer bottom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,651 @@
+{%- style -%}
+  .knr-newsletter-subscription {
+    position: relative;
+    width: 100%;
+    display: block;
+    font-family: Inter, sans-serif;
+  }
+  .knr-newsletter-subscription .page-width {
+    width: 100%;
+  }
+  @media screen and (min-width: 750px) {
+    .knr-newsletter-subscription .page-width {
+      padding: 0 4rem;
+    }
+  }
+  .knr-newsletter-subscription__inner {
+    margin: 0 auto;
+  }
+  .knr-newsletter-subscription__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    width: 100%;
+  }
+  .knr-newsletter-subscription__media,
+  .knr-newsletter-subscription__content {
+    width: 100%;
+  }
+  .knr-newsletter-subscription__image-wrap {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0;
+  }
+  .knr-newsletter-subscription__image-wrap img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  .knr-newsletter-subscription__image-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .knr-newsletter-subscription__image-placeholder svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+  .knr-newsletter-subscription__title {
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+  .knr-newsletter-subscription__form {
+    margin: 0;
+  }
+  .knr-newsletter-subscription__field-row {
+    display: flex;
+    width: 100%;
+    gap: 0;
+  }
+  .knr-newsletter-subscription__input {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border-radius: 0;
+  }
+  .knr-newsletter-subscription__button {
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.25s ease;
+    border-radius: 0;
+  }
+  .knr-newsletter-subscription__button:hover {
+    filter: brightness(0.95);
+  }
+  .knr-newsletter-subscription__success,
+  .knr-newsletter-subscription__error,
+  .knr-newsletter-subscription__gdpr {
+    margin: 0;
+  }
+  @media screen and (max-width: 749px) {
+    .knr-newsletter-subscription__grid {
+      grid-template-columns: 1fr;
+    }
+    .knr-newsletter-subscription__field-row {
+      flex-direction: column;
+    }
+    .knr-newsletter-subscription__button {
+      width: 100%;
+    }
+  }
+{%- endstyle -%}
+
+<div
+  id="knr-newsletter-subscription-{{ block.id }}"
+  class="knr-newsletter-subscription"
+  {{ block.shopify_attributes }}
+>
+  <div class="page-width">
+    <div class="knr-newsletter-subscription__inner">
+      <div class="knr-newsletter-subscription__grid">
+        <div class="knr-newsletter-subscription__media">
+          {% if block.settings.image %}
+            <div class="knr-newsletter-subscription__image-wrap">
+              <img
+                src="{{ block.settings.image | image_url: width: 1400 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                loading="lazy"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+              >
+            </div>
+          {% else %}
+            <div class="knr-newsletter-subscription__image-placeholder">
+              {{ 'image' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="knr-newsletter-subscription__content">
+          {% if block.settings.title != blank %}
+            <h2 class="knr-newsletter-subscription__title">{{ block.settings.title }}</h2>
+          {% endif %}
+
+          {%- form 'customer', class: 'knr-newsletter-subscription__form' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+
+            <div class="knr-newsletter-subscription__field-row">
+              <input
+                type="email"
+                name="contact[email]"
+                class="knr-newsletter-subscription__input"
+                value="{{ form.email }}"
+                aria-required="true"
+                autocorrect="off"
+                autocapitalize="off"
+                autocomplete="email"
+                {% if form.errors %}
+                  aria-invalid="true"
+                  aria-describedby="knr-newsletter-subscription-error-{{ block.id }}"
+                {% endif %}
+                {% if form.posted_successfully? %}
+                  aria-describedby="knr-newsletter-subscription-success-{{ block.id }}"
+                {% endif %}
+                placeholder="E-mail"
+                required
+              >
+              <button type="submit" class="knr-newsletter-subscription__button">
+                {{ block.settings.button_text }}
+              </button>
+            </div>
+
+            {%- if form.errors -%}
+              <p id="knr-newsletter-subscription-error-{{ block.id }}" class="knr-newsletter-subscription__error">
+                {{ form.errors.messages.email }}
+              </p>
+            {%- endif -%}
+
+            {%- if form.posted_successfully? -%}
+              <p
+                id="knr-newsletter-subscription-success-{{ block.id }}"
+                class="knr-newsletter-subscription__success"
+              >
+                {{ block.settings.success_message }}
+              </p>
+            {%- endif -%}
+          {%- endform -%}
+
+          {% if block.settings.gdpr_text != blank %}
+            <div class="knr-newsletter-subscription__gdpr">
+              {{ block.settings.gdpr_text }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #knr-newsletter-subscription-{{ block.id }} {
+    padding-top: {{ block.settings.section_padding_top }}px;
+    padding-bottom: {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__inner {
+    max-width: {{ block.settings.container_width }}px;
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__grid {
+    gap: {{ block.settings.grid_gap }}px;
+  }
+  @media (min-width: 750px) {
+    #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__grid {
+      justify-content: space-between;
+      align-items: center;
+    }
+    #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__media {
+      width: 68rem;
+    }
+    #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__image-wrap,
+    #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__image-placeholder {
+      width: 68rem;
+      height: 54rem;
+      aspect-ratio: auto;
+      border-radius: 0;
+    }
+    #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__content {
+      max-width: 63.4rem;
+      width: 100%;
+    }
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__image-wrap,
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__image-placeholder {
+    border-radius: 0;
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__content {
+    padding: {{ block.settings.content_padding }}px;
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__title {
+    margin-bottom: {{ block.settings.title_margin_bottom }}px;
+    font-size: 4rem;
+    line-height: 4.8rem;
+    letter-spacing: -0.35px;
+    color: {{ block.settings.title_color }};
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__form {
+    margin-bottom: {{ block.settings.form_margin_bottom }}px;
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__field-row { gap: 0; }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__input {
+    padding: 0 2.2rem;
+    height: 4.8rem;
+    border: {{ block.settings.input_border_width }}px solid {{ block.settings.input_border_color }};
+    border-radius: 0;
+    font-size: {{ block.settings.input_font_size }}px;
+    line-height: 1.2;
+    color: {{ block.settings.input_text_color }};
+    background-color: {{ block.settings.input_background_color }};
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__input::placeholder {
+    color: {{ block.settings.input_placeholder_color }};
+    font-size: 1.2rem;
+    line-height: 2rem;
+    font-weight: 400;
+    opacity: 1;
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__button {
+    width: 16rem;
+    min-width: 16rem;
+    height: 4.8rem;
+    padding: 0 1.6rem;
+    background-color: {{ block.settings.button_background_color }};
+    color: {{ block.settings.button_text_color }};
+    border: 0;
+    border-radius: 0;
+    font-size: 1.3rem;
+    line-height: 2rem;
+    letter-spacing: 0;
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__button:hover {
+    background-color: {{ block.settings.button_hover_color }};
+    filter: none;
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__success,
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__error {
+    margin-top: 12px;
+    font-size: {{ block.settings.message_font_size }}px;
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__success {
+    color: {{ block.settings.success_color }};
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__error {
+    color: {{ block.settings.error_color }};
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__gdpr {
+    font-size: {{ block.settings.gdpr_font_size }}px;
+    line-height: 1.5;
+    color: {{ block.settings.gdpr_text_color }};
+    margin-bottom: .2rem;
+  }
+  #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__gdpr p {
+    font-size: 1rem;
+    margin: 0;
+    letter-spacing: -0.275px;
+  }
+  @media (max-width: 749px) {
+    #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__grid {
+      gap: {{ block.settings.mobile_grid_gap }}px;
+    }
+    #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__content {
+      padding: {{ block.settings.mobile_content_padding }}px;
+    }
+    #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__title {
+      font-size: {{ block.settings.mobile_title_font_size }}px;
+      line-height: 1.2;
+    }
+    #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__field-row { gap: {{ block.settings.mobile_input_button_gap }}px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "KNR newsletter",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Contenu"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Titre",
+      "default": "L'alliance de la science botanique et du luxe naturel pour une peau visiblement rajeunie en 4 semaines."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Texte du champ email",
+      "default": "Votre adresse email"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texte du bouton",
+      "default": "S'inscrire"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Message de succes",
+      "default": "Merci pour votre inscription !"
+    },
+    {
+      "type": "richtext",
+      "id": "gdpr_text",
+      "label": "Texte RGPD",
+      "default": "<p>En vous inscrivant, vous acceptez de recevoir nos communications marketing. Vous pouvez vous desabonner a tout moment.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Mise en page"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Largeur du conteneur",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Espacement entre colonnes",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "mobile_grid_gap",
+      "label": "Espacement mobile",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Espacement haut",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Espacement bas",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "label": "Espacement du contenu",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_content_padding",
+      "label": "Espacement contenu mobile",
+      "min": 0,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Arriere-plan",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Couleur du titre",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "input_background_color",
+      "label": "Arriere-plan du champ",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_text_color",
+      "label": "Texte du champ",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "input_placeholder_color",
+      "label": "Placeholder du champ",
+      "default": "#999999"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Bordure du champ",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Arriere-plan du bouton",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Survol du bouton",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Texte du bouton",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "gdpr_text_color",
+      "label": "Texte RGPD",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "success_color",
+      "label": "Couleur succes",
+      "default": "#008060"
+    },
+    {
+      "type": "color",
+      "id": "error_color",
+      "label": "Couleur erreur",
+      "default": "#D82C0D"
+    },
+    {
+      "type": "header",
+      "content": "Typographie"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Taille du titre",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_title_font_size",
+      "label": "Taille titre mobile",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "input_font_size",
+      "label": "Taille texte du champ",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Taille texte du bouton",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "gdpr_font_size",
+      "label": "Taille texte RGPD",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "message_font_size",
+      "label": "Taille des messages",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Espacements internes"
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "label": "Marge sous le titre",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "form_margin_bottom",
+      "label": "Marge sous le formulaire",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "input_button_gap",
+      "label": "Espacement champ/bouton",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "mobile_input_button_gap",
+      "label": "Espacement mobile champ/bouton",
+      "min": 5,
+      "max": 20,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "input_padding",
+      "label": "Padding du champ",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_padding",
+      "label": "Padding du bouton",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Bordures"
+    },
+    {
+      "type": "range",
+      "id": "input_border_width",
+      "label": "Epaisseur bordure champ",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR newsletter"
+    }
+  ]
+}
+{% endschema %}

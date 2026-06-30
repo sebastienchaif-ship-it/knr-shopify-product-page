@@ -1,0 +1,203 @@
+{% style %}
+  .knr-footer-logo {
+    display: block;
+    width: 100%;
+    padding-top: {{ block.settings.spacing_top }}px;
+    padding-bottom: {{ block.settings.spacing_bottom }}px;
+    font-family: Inter, sans-serif;
+    padding-top: 14px;
+    padding-bottom: 76px;
+  }
+
+  .knr-footer-logo__container {
+    margin: 0 auto;
+    {% if block.settings.width_type == 'full' %}
+      width: 100%;
+      max-width: 100%;
+    {% else %}
+      width: {{ block.settings.custom_width }}px;
+      max-width: 100%;
+    {% endif %}
+  }
+
+  .knr-footer-logo__wrapper {
+    position: relative;
+    width: 100%;
+    {% if block.settings.height_type == 'auto' %}
+      height: auto;
+    {% else %}
+      height: {{ block.settings.custom_height }}px;
+    {% endif %}
+  }
+
+  .knr-footer-logo__wrapper img {
+    width: 100%;
+    {% if block.settings.height_type == 'auto' %}
+      height: auto;
+    {% else %}
+      height: 100%;
+      object-fit: cover;
+    {% endif %}
+    display: block;
+  }
+
+  .knr-footer-logo__placeholder {
+    background-color: #f4f4f4;
+    width: 100%;
+    {% if block.settings.height_type == 'auto' %}
+      min-height: 400px;
+    {% else %}
+      height: {{ block.settings.custom_height }}px;
+    {% endif %}
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .knr-footer-logo__placeholder svg {
+    width: 100%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+  .knr-footer-logo__empty-state {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+{% endstyle %}
+
+<div class="knr-footer-logo" {{ block.shopify_attributes }}>
+  <div class="knr-footer-logo__container">
+    <div class="knr-footer-logo__wrapper">
+      {% if block.settings.image %}
+        <img
+          src="{{ block.settings.image | image_url: width: 2000 }}"
+          alt="{{ block.settings.image.alt | escape }}"
+          loading="lazy"
+          width="{{ block.settings.image.width }}"
+          height="{{ block.settings.image.height }}"
+        >
+      {% else %}
+        <div class="knr-footer-logo__placeholder">
+          {{ 'image' | placeholder_svg_tag }}
+          <div class="knr-footer-logo__empty-state">Selectionnez une image</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "KNR footer logo",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Largeur"
+    },
+    {
+      "type": "select",
+      "id": "width_type",
+      "label": "Type de largeur",
+      "options": [
+        {
+          "value": "full",
+          "label": "Pleine largeur"
+        },
+        {
+          "value": "custom",
+          "label": "Personnalisee"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "range",
+      "id": "custom_width",
+      "label": "Largeur personnalisee",
+      "min": 1000,
+      "max": 1400,
+      "step": 5,
+      "unit": "px",
+      "default": 1345
+    },
+    {
+      "type": "header",
+      "content": "Hauteur"
+    },
+    {
+      "type": "select",
+      "id": "height_type",
+      "label": "Type de hauteur",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Automatique"
+        },
+        {
+          "value": "custom",
+          "label": "Personnalisee"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "range",
+      "id": "custom_height",
+      "label": "Hauteur personnalisee",
+      "min": 200,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Espacement"
+    },
+    {
+      "type": "range",
+      "id": "spacing_top",
+      "label": "Espacement haut",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "spacing_bottom",
+      "label": "Espacement bas",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "KNR footer logo"
+    }
+  ]
+}
+{% endschema %}

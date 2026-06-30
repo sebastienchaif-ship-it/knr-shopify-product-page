@@ -1,6 +1,6 @@
 aside.product__accordion.accordion {
-    margin-top: 25px;
-    border: none;
+  margin-top: 4rem;
+  border: none;
 }
 
 .complementary-products__container {
@@ -14,7 +14,7 @@ product-recommendations:not(.is-accordion) .complementary-products__container {
 }
 
 .complementary-products__container > details[open] {
-  padding-bottom: 1.5rem;
+  padding-bottom: 0;
 }
 
 .complementary-slider {
@@ -36,7 +36,7 @@ product-recommendations:not(.is-accordion) .complementary-products__container {
 }
 
 .complementary-slide.complementary-slide--standard > ul {
-  gap: calc(var(--grid-mobile-vertical-spacing) + 8px);
+  gap: 8px;
 }
 
 @media screen and (min-width: 750px) {
@@ -45,7 +45,7 @@ product-recommendations:not(.is-accordion) .complementary-products__container {
   }
 
   .complementary-slide.complementary-slide--standard > ul {
-    gap: calc(var(--grid-desktop-vertical-spacing) + 8px);
+    gap: 8px;
   }
 }
 
@@ -86,15 +86,29 @@ product-recommendations.is-accordion + .accordion {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0 15px 0 3px;
+  padding: 0 .4rem .9rem;
 }
 
 .complementary-products__container .card--horizontal .card__information .card-information {
     width: auto;
 }
 
+.complementary-products__container .card--horizontal .card__information .card-information .price {
+  margin: 0;
+  padding: 0;
+  line-height: 1.6rem;
+}
+
+.complementary-products__container .card--horizontal .card__information .card-information .price .price__regular {
+  line-height: 1.6rem;
+  padding: 0;
+  margin: 0;
+  height: 1.6rem;
+}
+
 .complementary-products__container .card--horizontal .card__inner {
   max-width: 100%;
+  --ratio-percent: 130.55% !important;
 }
 
 @media screen and (min-width: 750px) and (max-width: 1200px) {
@@ -178,19 +192,27 @@ product-recommendations.is-accordion + .accordion {
 }
 
 .complementary-products__container .summary__title {
-  padding-left: 3px;
+  padding-left: 0;
 }
 
 .complementary-products__container .summary__title .accordion__title {
   margin: 0;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 1.2rem;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0;
+  letter-spacing: -0.24px;
+  line-height: 1.2rem;
+  min-height: initial;
+  max-width: fit-content;
+}
+
+.complementary-products__container .knr-product-accordion__icon {
+  transform: rotate(-90deg);
+  top: 0px;
 }
 
 .complementary-products__container .contains-card--product.complementary-slider {
-  padding-top: 13px;
+  padding-top: 2.4rem;
 }
 
 .complementary-products__container .product__accordion.accordion slideshow-component {
@@ -210,18 +232,21 @@ product-recommendations.is-accordion + .accordion {
 }
 
 .complementary-slider .complementary-slide ul li{
-  width: 220px;
+  width: 100%;
+  max-width: 15.933rem;
 }
 
 .complementary-slider .complementary-slide ul li .product-card-wrapper .card {
+  --ratio-percent: 125.0% !important;
   flex-direction: column;
-  gap: 1rem;
+  gap: .8rem;
+  padding-bottom: 1.144rem;
 }
 
 .complementary-products__container .card--horizontal .card__information .card__heading.h5 {
-  font-size: 13px;
+  font-size: 1rem;
   font-weight: 400;
-  line-height: 1.2rem;
-  letter-spacing: 0;
-  padding-left: 3px;
+  line-height: 1.4rem;
+  letter-spacing: -0.20px;
+  padding: 0;
 }
