@@ -30,7 +30,7 @@
   {%- style -%}
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+      padding-bottom: 0;
     }
 
     @media screen and (min-width: 750px) {
@@ -80,6 +80,16 @@
       <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
         <div class="grid__item product__media-wrapper">
           {% render 'product-media-gallery', variant_images: variant_images %}
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'knr_product_labels' -%}
+                {% if block.settings.change_on_mobile %}
+                  <div {{ block.shopify_attributes }} class="knr-visible-mobile">
+                    {% render 'knr-product-labels', block: block %}
+                  </div>
+                {% endif %}
+            {%- endcase -%}
+          {%- endfor -%}
         </div>
         <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
           <section
@@ -100,16 +110,36 @@
                     {{- block.settings.text -}}
                   </p>
                 {%- when 'title' -%}
-                  <div class="product__title" {{ block.shopify_attributes }}>
-                    <h1>{{ product.title | escape }}</h1>
-                    <a href="{{ product.url }}" class="product__title">
-                      <h2 class="h1">
-                        {{ product.title | escape }}
-                      </h2>
-                    </a>
+                  <div class="product__title-price">
+                    <div class="product__title" {{ block.shopify_attributes }}>
+                      <h1>{{ product.title | escape }}</h1>
+                      <a href="{{ product.url }}" class="product__title">
+                        <h2 class="h1">
+                          {{ product.title | escape }}
+                        </h2>
+                      </a>
+                    </div>
+                    <div
+                      id="price-{{ section.id }}"
+                      class="knr-hide-desktop"
+                      role="status"
+                      {{ block.shopify_attributes }}
+                    >
+                      {%- render 'price',
+                        product: product,
+                        use_variant: true,
+                        show_badges: false,
+                        price_class: 'price--large'
+                      -%}
+                    </div>
                   </div>
                 {%- when 'knr_breadcrumb' -%}
-                  <div {{ block.shopify_attributes }}>
+                  <div
+                    {{ block.shopify_attributes }}
+                    {% if block.settings.hide_on_mobile %}
+                      class="knr-hide-mobile"
+                    {% endif %}
+                  >
                     {% render 'knr-breadcrumb',
                       show_home: block.settings.show_home,
                       home_label: block.settings.home_label,
@@ -118,7 +148,12 @@
                     %}
                   </div>
                 {%- when 'knr_product_labels' -%}
-                  <div {{ block.shopify_attributes }}>
+                  <div
+                    {{ block.shopify_attributes }}
+                    {% if block.settings.change_on_mobile %}
+                      class="knr-hide-mobile"
+                    {% endif %}
+                  >
                     {% render 'knr-product-labels', block: block %}
                   </div>
                 {%- when 'knr_product_scores' -%}
@@ -130,7 +165,7 @@
                     {% render 'knr-product-accordions', block: block %}
                   </div>
                 {%- when 'price' -%}
-                  <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+                  <div id="price-{{ section.id }}" class="knr-hide-mobile" role="status" {{ block.shopify_attributes }}>
                     {%- render 'price',
                       product: product,
                       use_variant: true,
@@ -897,13 +932,27 @@
           "id": "separator",
           "label": "Séparateur",
           "default": "›"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_on_mobile",
+          "label": "Masquer sur mobile",
+          "default": false
         }
       ]
     },
     {
       "type": "knr_product_labels",
       "name": "knr - Product Labels",
-      "limit": 1
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "change_on_mobile",
+          "label": "Changement de position en mobile",
+          "default": false
+        }
+      ]
     },
     {
       "type": "knr_product_scores",

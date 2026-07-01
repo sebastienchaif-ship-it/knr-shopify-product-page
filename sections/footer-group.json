@@ -17,7 +17,7 @@
             "container_width": 1400,
             "grid_gap": 12,
             "mobile_grid_gap": 30,
-            "section_padding_top": 50,
+            "section_padding_top": 100,
             "section_padding_bottom": 60,
             "content_padding": 20,
             "mobile_content_padding": 10,
@@ -152,7 +152,7 @@
             "social_icon_spacing": 15,
             "social_icon_color": "#121212",
             "social_icon_hover_color": "#666666",
-            "background_color": "#FFFFFF",
+            "background_color": "#ffffff",
             "padding_vertical": 20,
             "padding_horizontal": 20,
             "max_width": 1400

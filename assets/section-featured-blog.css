@@ -29,6 +29,10 @@
   margin: 0;
 }
 
+.blog .slider-buttons {
+  margin-top: 4rem;
+}
+
 @media screen and (min-width: 990px) {
   .blog__posts.articles-wrapper {
     margin: 0;
@@ -41,7 +45,8 @@
 
 @media screen and (max-width: 749px) {
   .blog__post.article {
-    width: calc(100% - 3rem - var(--grid-mobile-horizontal-spacing));
+    width: calc(100% - var(--grid-mobile-horizontal-spacing) - 15rem);
+    min-width: 25.5rem;
   }
 }
 

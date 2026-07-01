@@ -140,4 +140,17 @@
     --swatch-input--size: 2.8rem;
   }
 }
+
+@media screen and (max-width: 749px) {
+  .product-form__input--pill input[type=radio]+label {
+    border-bottom: 2px #ffffff solid;
+  }
+  .product-form__input--pill input[type='radio'] + label:hover {
+    border-color: #000;
+  }
+
+  .product-form__input--pill input[type='radio']:checked + label {
+    border-color: #000;
+  }
+}
 /* End custom styles for Swatch display type */

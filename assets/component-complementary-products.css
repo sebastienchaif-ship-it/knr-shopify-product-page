@@ -1,5 +1,6 @@
 aside.product__accordion.accordion {
   margin-top: 4rem;
+  margin-bottom: 0;
   border: none;
 }
 
@@ -40,6 +41,9 @@ product-recommendations:not(.is-accordion) .complementary-products__container {
 }
 
 @media screen and (min-width: 750px) {
+  aside.product__accordion.accordion {
+    margin-bottom: 0;
+  }
   .complementary-slide > ul {
     gap: var(--grid-desktop-vertical-spacing);
   }

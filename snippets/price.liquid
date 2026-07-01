@@ -125,12 +125,20 @@
       </span>
     {%- endif -%}
   </div>
-  <div id="unit-price-label-container" class="unit-price-label-container">
-    <p id="unit-price-label" class="unit-price-label"></p>
+  <div class="unit-price-label-container" data-unit-price-label-container>
+    <p class="unit-price-label" data-unit-price-label></p>
   </div>
 
   <script>
     (function() {
+      const scriptEl = document.currentScript;
+      const scope =
+        (scriptEl &&
+          scriptEl.closest(
+            'product-info, .product__info-wrapper, .product, .featured-product, .card-wrapper, .shopify-section'
+          )) ||
+        document;
+
       // Générer un objet JSON avec les metafields de tous les variants
       const variantMetafields = {
         {%- for variant in product.variants -%}
@@ -138,43 +146,55 @@
         {%- endfor -%}
       };
 
+      function isInScope(node) {
+        return scope === document || (node && scope.contains(node));
+      }
+
       function getCurrentVariantId() {
         // Try common selectors in order
-        const input = document.querySelector('input[name="id"]');
+        const input = scope.querySelector('input[name="id"]');
         if (input && input.value) return String(input.value);
-        const select = document.querySelector('select[name="id"]');
+        const select = scope.querySelector('select[name="id"]');
         if (select && select.value) return String(select.value);
         if (window.Shopify && window.Shopify.ProductForm && window.Shopify.ProductForm.variantId) return String(window.Shopify.ProductForm.variantId);
 
         // Look for active buttons/swatches with data-variant-id
-        const active = document.querySelector('[data-variant-id].is-active, [data-variant-id][aria-pressed="true"], [data-variant-id][aria-checked="true"], [data-variant-id].active');
+        const active = scope.querySelector(
+          '[data-variant-id].is-active, [data-variant-id][aria-pressed="true"], [data-variant-id][aria-checked="true"], [data-variant-id].active'
+        );
         if (active) return String(active.getAttribute('data-variant-id'));
 
         return null;
       }
 
       function updateUnitPriceLabel(variantId) {
-        const unitPriceLabel = document.getElementById('unit-price-label');
-        const container = document.getElementById('unit-price-label-container');
-        if (!unitPriceLabel || !container) return;
+        const unitPriceLabels = scope.querySelectorAll('[data-unit-price-label]');
+        const containers = scope.querySelectorAll('[data-unit-price-label-container]');
+        if (!unitPriceLabels.length || !containers.length) return;
 
         const metafieldValue = variantMetafields[String(variantId)];
-        if (metafieldValue && metafieldValue.trim() !== '') {
-          unitPriceLabel.textContent = metafieldValue;
-          container.style.display = 'block';
-        } else {
-          unitPriceLabel.textContent = '';
-          container.style.display = 'none';
-        }
+        const hasValue = Boolean(metafieldValue && metafieldValue.trim() !== '');
+
+        unitPriceLabels.forEach(function(label) {
+          label.textContent = hasValue ? metafieldValue : '';
+        });
+
+        containers.forEach(function(container) {
+          container.hidden = !hasValue;
+        });
       }
 
       function onVariantChangeEvent(e) {
+        if (e && e.target && !isInScope(e.target)) return;
         const idFromEvent = e && e.detail && e.detail.variant && e.detail.variant.id;
         const id = idFromEvent || getCurrentVariantId();
         if (id) updateUnitPriceLabel(id);
       }
 
       function initListeners() {
+        if (scope !== document && scope.dataset.unitPriceLabelListenersAttached === 'true') return;
+        if (scope !== document) scope.dataset.unitPriceLabelListenersAttached = 'true';
+
         // Custom theme events
         document.addEventListener('variant:change', onVariantChangeEvent);
         document.addEventListener('on:variant:change', onVariantChangeEvent);
@@ -182,6 +202,7 @@
         // Generic change on selects or inputs
         document.addEventListener('change', function(e) {
           if (!e || !e.target) return;
+          if (!isInScope(e.target)) return;
           if (e.target.name === 'id' || e.target.closest('[name="id"]')) {
             const id = getCurrentVariantId();
             if (id) updateUnitPriceLabel(id);
@@ -190,6 +211,7 @@
 
         // Clicks on swatches / buttons exposing data-variant-id
         document.addEventListener('click', function(e) {
+          if (!e || !e.target || !isInScope(e.target)) return;
           const btn = e.target.closest('[data-variant-id]');
           if (btn) {
             const id = btn.getAttribute('data-variant-id');
@@ -198,7 +220,9 @@
         });
 
         // Observe the product form for DOM replacements (some themes re-render form)
-        const productForm = document.querySelector('form[action*="/cart/add"], form[data-product-form], form.product-form') || document.querySelector('form');
+        const productForm =
+          scope.querySelector('form[action*="/cart/add"], form[data-product-form], form.product-form') ||
+          scope.querySelector('form');
         if (productForm) {
           const mo = new MutationObserver(function() {
             const id = getCurrentVariantId();

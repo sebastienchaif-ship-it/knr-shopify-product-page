@@ -11,8 +11,8 @@
 
 <section
   id="knr-what-customers-{{ section.id }}"
-  class="knr-what-customers"
-  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; padding-left: {{ section.settings.padding_left }}px; padding-right: {{ section.settings.padding_right }}px;"
+  class="knr-what-customers section-{{ section.id }}-padding"
+  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};"
 >
   {% if section.settings.width_mode == 'theme' %}
     <div class="page-width">
@@ -65,8 +65,7 @@
         {% for block in section.blocks %}
           <div
             id="Slide-{{ block.id }}"
-            class="knr-review slider__slide"
-            style="padding: {{ block.settings.item_spacing }}px;"
+            class="knr-review slider__slide knr-review--{{ block.id }}"
           >
             <div class="knr-review__rating">
               <span class="stars">
@@ -110,6 +109,21 @@
   {% endif %}
 
   {%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.80 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.50 | round: 0 }}px;
+      padding-left: {{ section.settings.padding_left | times: 0.80 | round: 0 }}px;
+      padding-right: {{ section.settings.padding_right | times: 0.80 | round: 0 }}px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+        padding-left: {{ section.settings.padding_left }}px;
+        padding-right: {{ section.settings.padding_right }}px;
+      }
+    }
+
     .knr-what-customers {
       position: relative;
     }
@@ -140,8 +154,10 @@
       max-width: 100%;
       margin: 0 auto 3.2rem;
       cursor: ew-resize;
-      min-height: 32rem;
-      height: 64rem;
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      height: auto;
+      min-height: 19.2rem;
     }
     .knr-compare__before,
     .knr-compare__after {
@@ -267,8 +283,19 @@
       scroll-snap-align: start;
       box-sizing: border-box;
     }
+    {% for block in section.blocks %}
+      .knr-review--{{ block.id }} {
+        padding: {{ block.settings.item_spacing | times: 0 | round: 0 }}px;
+      }
+
+      @media screen and (min-width: 750px) {
+        .knr-review--{{ block.id }} {
+          padding: {{ block.settings.item_spacing }}px;
+        }
+      }
+    {% endfor %}
     .knr-review-slider__controls {
-      margin-top: 0;
+      margin-top: 4rem;
       gap: 1.6rem;
     }
     .knr-review__rating {
@@ -316,9 +343,23 @@
     }
 
     @media (max-width: 749px) {
+      .knr-what-customers .page-width {
+        padding: 0;
+      }
       .knr-review__comment {
-        font-size: 2rem;
-        line-height: 2.8rem;
+        font-size: 2.4rem;
+        line-height: 3.2rem;
+        letter-spacing: -0.48px;
+        padding: 0 1rem;
+      }
+      .knr-what-customers__title {
+        font-size: 3.2rem;
+        line-height: 4rem;
+        letter-spacing: -1.28px;
+        padding: 0 4rem;
+      }
+      .knr-compare__wrap {
+        margin: 0 auto;
       }
     }
   {%- endstyle -%}

@@ -735,16 +735,23 @@ class SliderComponent extends HTMLElement {
     this.pageTotalElement = this.querySelector('.slider-counter--total');
     this.prevButton = this.querySelector('button[name="previous"]');
     this.nextButton = this.querySelector('button[name="next"]');
+    this.hasGenericDotControls = this.tagName !== 'SLIDESHOW-COMPONENT';
+    this.sliderControlLinksArray = Array.from(this.querySelectorAll('.slider-counter__link'));
 
-    if (!this.slider || !this.nextButton) return;
+    if (!this.slider) return;
 
     this.initPages();
     const resizeObserver = new ResizeObserver((entries) => this.initPages());
     resizeObserver.observe(this.slider);
 
     this.slider.addEventListener('scroll', this.update.bind(this));
-    this.prevButton.addEventListener('click', this.onButtonClick.bind(this));
-    this.nextButton.addEventListener('click', this.onButtonClick.bind(this));
+    if (this.prevButton) this.prevButton.addEventListener('click', this.onButtonClick.bind(this));
+    if (this.nextButton) this.nextButton.addEventListener('click', this.onButtonClick.bind(this));
+    if (this.hasGenericDotControls) {
+      this.sliderControlLinksArray.forEach((link, index) => {
+        link.addEventListener('click', this.onDotClick.bind(this, index));
+      });
+    }
   }
 
   initPages() {
@@ -766,7 +773,7 @@ class SliderComponent extends HTMLElement {
   update() {
     // Temporarily prevents unneeded updates resulting from variant changes
     // This should be refactored as part of https://github.com/Shopify/dawn/issues/2057
-    if (!this.slider || !this.nextButton) return;
+    if (!this.slider) return;
 
     const previousPage = this.currentPage;
     this.currentPage = Math.round(this.slider.scrollLeft / this.sliderItemOffset) + 1;
@@ -787,7 +794,21 @@ class SliderComponent extends HTMLElement {
       );
     }
 
+    if (this.hasGenericDotControls && this.sliderControlLinksArray.length) {
+      this.sliderControlLinksArray.forEach((link, index) => {
+        const isActive = index === this.currentPage - 1;
+        link.classList.toggle('slider-counter__link--active', isActive);
+        if (isActive) {
+          link.setAttribute('aria-current', 'true');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    }
+
     if (this.enableSliderLooping) return;
+
+    if (!this.prevButton || !this.nextButton) return;
 
     if (this.isSlideVisible(this.sliderItemsToShow[0]) && this.slider.scrollLeft === 0) {
       this.prevButton.setAttribute('disabled', 'disabled');
@@ -814,6 +835,13 @@ class SliderComponent extends HTMLElement {
       event.currentTarget.name === 'next'
         ? this.slider.scrollLeft + step * this.sliderItemOffset
         : this.slider.scrollLeft - step * this.sliderItemOffset;
+    this.setSlidePosition(this.slideScrollPosition);
+  }
+
+  onDotClick(index, event) {
+    event.preventDefault();
+    const dotPage = index + 1;
+    this.slideScrollPosition = (dotPage - 1) * this.sliderItemOffset;
     this.setSlidePosition(this.slideScrollPosition);
   }
 

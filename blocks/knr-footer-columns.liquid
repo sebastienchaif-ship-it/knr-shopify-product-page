@@ -138,6 +138,44 @@
     background-color: {{ block.settings.cta_hover_bg_color }};
   }
 
+  .knr-footer-columns__menu-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 1.5rem;
+    margin-bottom: 2.4rem;
+  }
+
+  .knr-footer-columns__menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    max-height: 9999px;
+    overflow: visible;
+    transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+    opacity: 1;
+    visibility: visible;
+  }
+
+
+
+  .knr-footer-columns__menu-toggle {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: default;
+    text-align: left;
+    margin: 0;
+    font-size: inherit;
+    color: inherit;
+    position: relative;
+  }
+
   @media screen and (max-width: 989px) {
     .knr-footer-columns__grid {
       grid-template-columns: repeat(2, 1fr);
@@ -146,9 +184,86 @@
   }
 
   @media screen and (max-width: 749px) {
+
+    .knr-footer-columns__menu-list[hidden] {
+      display: none;
+    }
+
+    .knr-footer-columns__menu-toggle {
+      display: none;
+      cursor: pointer;
+    }
+
+
+    .knr-footer-columns__menu-title {
+      margin-bottom: 0;
+    }
+
+    .knr-footer-columns__menu-toggle::after {
+      content: '▼';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+    }
+
+    .knr-footer-columns__menu-toggle[aria-expanded="true"]::after {
+      transform: rotate(-180deg);
+    }
+
+    .knr-footer-columns {
+      padding: 3.2rem 2.4rem;
+    }
     .knr-footer-columns__grid {
-      grid-template-columns: 1fr;
-      gap: 32px;
+      flex-direction: column;
+      gap: 0;
+    }
+    .knr-footer-columns__column {
+      width: 100%;
+      max-width: none;
+      padding: 0;
+    }
+    .knr-footer-columns__column:first-child {
+      padding-left: 0;
+      border-top: solid 1px #0035923D;
+    }
+
+    .knr-footer-columns__column:nth-child(2) {
+      padding-left: 0;
+      border-top: solid 1px #0035923D;
+    }
+
+    .knr-footer-columns__column:nth-child(3) {
+      padding-left: 0;
+      border-top: solid 1px #0035923D;
+    }
+
+    .knr-footer-columns__column:last-child {
+      padding-left: 0;
+      padding-right: 0;
+      width: 100%;
+    }
+    .knr-footer-columns__column:not(:last-child) .knr-footer-columns__menu-toggle {
+      display: block;
+      padding: 1.6rem 0;
+    }
+    .knr-footer-columns__column:not(:last-child) .knr-footer-columns__menu-title {
+      margin: 0;
+      font-size: {{ block.settings.title_size }}px;
+      font-weight: 400;
+      color: {{ block.settings.title_color }};
+      letter-spacing: -0.375px;
+      line-height: 2rem;
+    }
+    .knr-footer-columns__column:last-child {
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      padding-top: 4rem;
+    }
+    .knr-footer-columns__menu-list {
+      padding-left: 1rem;
+      padding-bottom: 2rem;
     }
   }
 {% endstyle %}
@@ -166,8 +281,10 @@
 
         <div class="knr-footer-columns__column">
           {% if menu != blank %}
-            <h3 class="knr-footer-columns__menu-title">{{ menu_title | default: menu.title }}</h3>
-            <ul class="knr-footer-columns__menu-list">
+            <button class="knr-footer-columns__menu-toggle" data-accordion="menu-{{ i }}" aria-expanded="false">
+              <h3 class="knr-footer-columns__menu-title">{{ menu_title | default: menu.title }}</h3>
+            </button>
+            <ul class="knr-footer-columns__menu-list" data-accordion-content="menu-{{ i }}" hidden>
               {% for link in menu.links %}
                 <li>
                   <a href="{{ link.url }}" class="knr-footer-columns__menu-link">
@@ -219,6 +336,32 @@
     </div>
   </div>
 </div>
+
+<script>
+  (function () {
+    var blocks = document.querySelectorAll('.knr-footer-columns');
+    blocks.forEach(function (block) {
+      var toggles = block.querySelectorAll('.knr-footer-columns__menu-toggle');
+      toggles.forEach(function (toggle) {
+        toggle.addEventListener('click', function (e) {
+          e.preventDefault();
+          var accordionId = toggle.getAttribute('data-accordion');
+          var content = block.querySelector('[data-accordion-content="' + accordionId + '"]');
+          if (!content) return;
+
+          var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+          if (isOpen) {
+            toggle.setAttribute('aria-expanded', 'false');
+            content.setAttribute('hidden', '');
+          } else {
+            toggle.setAttribute('aria-expanded', 'true');
+            content.removeAttribute('hidden');
+          }
+        });
+      });
+    });
+  })();
+</script>
 
 {% schema %}
 {

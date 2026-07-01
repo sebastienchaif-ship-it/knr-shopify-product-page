@@ -86,14 +86,14 @@
     margin: 0;
   }
   @media screen and (max-width: 749px) {
+    .knr-newsletter-subscription .page-width {
+      padding: 0 2.4rem;
+    }
     .knr-newsletter-subscription__grid {
       grid-template-columns: 1fr;
     }
     .knr-newsletter-subscription__field-row {
       flex-direction: column;
-    }
-    .knr-newsletter-subscription__button {
-      width: 100%;
     }
   }
 {%- endstyle -%}
@@ -186,9 +186,15 @@
 
 <style>
   #knr-newsletter-subscription-{{ block.id }} {
-    padding-top: {{ block.settings.section_padding_top }}px;
-    padding-bottom: {{ block.settings.section_padding_bottom }}px;
+    padding-top: {{ block.settings.section_padding_top | times: 0.33 | round: 0 }}px;
+    padding-bottom: {{ block.settings.section_padding_bottom | times: 0.53 | round: 0 }}px;
     background-color: {{ block.settings.background_color }};
+  }
+  @media (min-width: 750px) {
+    #knr-newsletter-subscription-{{ block.id }} {
+      padding-top: {{ block.settings.section_padding_top }}px;
+      padding-bottom: {{ block.settings.section_padding_bottom }}px;
+    }
   }
   #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__inner {
     max-width: {{ block.settings.container_width }}px;
@@ -203,6 +209,8 @@
     }
     #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__media {
       width: 68rem;
+      width: 100%;
+      max-width: 68rem;
     }
     #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__image-wrap,
     #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__image-placeholder {
@@ -210,6 +218,8 @@
       height: 54rem;
       aspect-ratio: auto;
       border-radius: 0;
+      width: 100%;
+      max-width: 68rem;
     }
     #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__content {
       max-width: 63.4rem;
@@ -240,7 +250,7 @@
     border: {{ block.settings.input_border_width }}px solid {{ block.settings.input_border_color }};
     border-radius: 0;
     font-size: {{ block.settings.input_font_size }}px;
-    line-height: 1.2;
+    line-height: 4.8rem;
     color: {{ block.settings.input_text_color }};
     background-color: {{ block.settings.input_background_color }};
   }
@@ -299,9 +309,23 @@
     }
     #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__title {
       font-size: {{ block.settings.mobile_title_font_size }}px;
-      line-height: 1.2;
+      line-height: 4rem;
+      letter-spacing: {{ block.settings.mobile_title_font_size | times: -0.04 }}px;
+      margin-bottom: 4rem;
     }
     #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__field-row { gap: {{ block.settings.mobile_input_button_gap }}px; }
+
+    .knr-newsletter-subscription__input {
+      flex: 0;
+    }
+     #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__button {
+      width: 100%;
+    }
+    #knr-newsletter-subscription-{{ block.id }} .knr-newsletter-subscription__gdpr {
+      font-size: 1rem;
+      line-height: 1.4rem;
+      margin-bottom: 0;
+    }
   }
 </style>
 
@@ -379,16 +403,16 @@
       "label": "Espacement mobile",
       "min": 0,
       "max": 60,
-      "step": 5,
+      "step": 2,
       "unit": "px",
-      "default": 30
+      "default": 32
     },
     {
       "type": "range",
       "id": "section_padding_top",
       "label": "Espacement haut",
       "min": 0,
-      "max": 100,
+      "max": 120,
       "step": 5,
       "unit": "px",
       "default": 50
@@ -398,7 +422,7 @@
       "id": "section_padding_bottom",
       "label": "Espacement bas",
       "min": 0,
-      "max": 100,
+      "max": 120,
       "step": 5,
       "unit": "px",
       "default": 50
@@ -601,9 +625,9 @@
       "type": "range",
       "id": "mobile_input_button_gap",
       "label": "Espacement mobile champ/bouton",
-      "min": 5,
+      "min": 4,
       "max": 20,
-      "step": 5,
+      "step": 2,
       "unit": "px",
       "default": 10
     },

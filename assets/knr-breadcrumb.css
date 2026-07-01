@@ -25,3 +25,7 @@
 .knr-breadcrumb__current {
   font-weight: 600;
 }
+
+@media screen and (max-width: 749px) {
+  .knr-hide-mobile { display: none; }
+}

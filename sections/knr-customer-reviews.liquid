@@ -6,8 +6,8 @@
 
 <section
   id="knr-customer-reviews-{{ section.id }}"
-  class="knr-customer-reviews"
-  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  class="knr-customer-reviews section-{{ section.id }}-padding"
+  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};"
 >
   {% if section.settings.width_mode == 'theme' %}
     <div class="page-width">
@@ -221,6 +221,18 @@
   {% endif %}
 
   {%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.66 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 1.06 | round: 0 }}px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+
     .knr-customer-reviews {
       font-family: Inter, sans-serif;
     }
@@ -592,7 +604,18 @@
     @media (max-width: 999px) {
       .knr-customer-reviews__grid {
         grid-template-columns: 1fr;
-        gap: 1.3rem;
+        gap: 4rem;
+      }
+      .knr-customer-reviews__panel--summary {
+        text-align: center;
+        padding: 0;
+      }
+      .knr-customer-reviews__summary-line,
+      .knr-customer-reviews__rating-row {
+        justify-content: center;
+      }
+      .knr-customer-reviews__panel--actions {
+        padding: 0;
       }
       .knr-customer-reviews__filter-grid {
         grid-template-columns: 1fr;
@@ -600,11 +623,22 @@
       .knr-customer-reviews__rating-count {
         font-size: 10px;
       }
+      .knr-customer-reviews__load-more-button {
+        width: 100%;
+        max-width: 34.2rem;
+      }
     }
-    @media (max-width: 649px) {
+    @media (max-width: 749px) {
+      .knr-customer-reviews__title {
+        font-size: 2.4rem;
+        letter-spacing: -0.48px;
+        line-height: 3.2rem;
+      }
+      .knr-customer-reviews__top {
+        margin-bottom: 4rem;
+      }
       .knr-customer-reviews__filter-toggle {
         width: 100%;
-        justify-content: center;
       }
       .knr-customer-reviews__button--block {
         width: 100%;

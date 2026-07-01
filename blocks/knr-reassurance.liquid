@@ -19,6 +19,39 @@
     gap: {{ block.settings.items_spacing }}px;
   }
 
+  .knr-reassurance__slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .knr-reassurance__slider-dots .slider-counter__link {
+    padding: 0;
+    margin: 0;
+    line-height: 0;
+  }
+
+  .knr-reassurance__slider-dots .slider-counter__link .dot {
+    width: 25px;
+    height: 1px;
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    display: block;
+    background-color: #B5A282;
+  }
+
+  .knr-reassurance__slider-dots .slider-counter__link--active .dot {
+    background-color: #000000;
+  }
+
+  .knr-reassurance__slider-dots .slider-counter__link:not(.slider-counter__link--active):hover .dot {
+    background-color: #b9b09b;
+  }
+
   .knr-reassurance__item {
     display: flex;
     flex-direction: column;
@@ -82,54 +115,126 @@
     letter-spacing: -0.125px;
   }
 
+  .knr-reassurance__text br {
+    display: none;
+  }
+
   @media screen and (max-width: 749px) {
+    .knr-reassurance {
+      margin: 3.2rem 0;
+      padding: 8rem 4rem;
+    }
+
+    .knr-reassurance__content {
+      gap: 2.4rem;
+    }
+
     .knr-reassurance__grid {
-      grid-template-columns: 1fr;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .knr-reassurance__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .knr-reassurance__item {
+      flex: 0 0 100%;
+      min-width: 100%;
+      max-width: 100%;
+      scroll-snap-align: start;
+    }
+
+    .knr-reassurance__text {
+      margin: 0;
+      line-height: 2rem;
+      padding: 0;
+      letter-spacing: -0.24px;
+    }
+
+    .knr-reassurance .slider-buttons {
+      margin-top: 2.4rem;
     }
   }
 {% endstyle %}
 
+{%- liquid
+  assign reassurance_items_count = 0
+  for i in (1..6)
+    assign enabled_key = 'item_' | append: i | append: '_enabled'
+    if block.settings[enabled_key]
+      assign reassurance_items_count = reassurance_items_count | plus: 1
+    endif
+  endfor
+-%}
+
 <div class="knr-reassurance" {{ block.shopify_attributes }}>
   <div class="knr-reassurance__container">
-    <div class="knr-reassurance__grid">
-      {% for i in (1..6) %}
-        {% liquid
-          assign enabled_key = 'item_' | append: i | append: '_enabled'
-          assign icon_key = 'item_' | append: i | append: '_icon'
-          assign title_key = 'item_' | append: i | append: '_title'
-          assign description_key = 'item_' | append: i | append: '_description'
+    <slider-component class="knr-reassurance__slider">
+      <div id="Slider-{{ block.id }}" class="knr-reassurance__grid slider slider--mobile">
+        {% for i in (1..6) %}
+          {% liquid
+            assign enabled_key = 'item_' | append: i | append: '_enabled'
+            assign icon_key = 'item_' | append: i | append: '_icon'
+            assign title_key = 'item_' | append: i | append: '_title'
+            assign description_key = 'item_' | append: i | append: '_description'
 
-          assign item_enabled = block.settings[enabled_key]
-          assign item_icon = block.settings[icon_key]
-          assign item_title = block.settings[title_key]
-          assign item_description = block.settings[description_key]
-        %}
+            assign item_enabled = block.settings[enabled_key]
+            assign item_icon = block.settings[icon_key]
+            assign item_title = block.settings[title_key]
+            assign item_description = block.settings[description_key]
+          %}
 
-        {% if item_enabled %}
-          <div class="knr-reassurance__item">
-            {% if item_icon %}
-              <div class="knr-reassurance__icon">
-                <img
-                  src="{{ item_icon | image_url: width: 200 }}"
-                  alt="{{ item_title | escape }}"
-                  loading="lazy"
-                  width="200"
-                  height="200"
-                >
+          {% if item_enabled %}
+            <div id="Slide-{{ block.id }}-{{ i }}" class="knr-reassurance__item slider__slide">
+              {% if item_icon %}
+                <div class="knr-reassurance__icon">
+                  <img
+                    src="{{ item_icon | image_url: width: 200 }}"
+                    alt="{{ item_title | escape }}"
+                    loading="lazy"
+                    width="200"
+                    height="200"
+                  >
+                </div>
+              {% endif %}
+              <div class="knr-reassurance__content">
+                {% if item_title != blank %}
+                  <h3 class="knr-reassurance__title">{{ item_title }}</h3>
+                {% endif %}
+                {% if item_description != blank %}
+                  <p class="knr-reassurance__text">{{ item_description | newline_to_br }}</p>
+                {% endif %}
               </div>
-            {% endif %}
-            <div class="knr-reassurance__content">
-              {% if item_title != blank %}
-                <h3 class="knr-reassurance__title">{{ item_title }}</h3>
-              {% endif %}
-              {% if item_description != blank %}
-                <p class="knr-reassurance__text">{{ item_description | newline_to_br }}</p>
-              {% endif %}
             </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {% if reassurance_items_count > 1 %}
+        <div class="slider-buttons large-up-hide">
+          <div
+            class="slider-counter slider-counter--dots knr-reassurance__slider-dots"
+            role="group"
+            aria-label="{{ 'sections.slideshow.carousel' | t }}"
+          >
+            {%- for i in (1..reassurance_items_count) -%}
+              <button
+                class="slider-counter__link slider-counter__link--dots link{% if forloop.first %} slider-counter__link--active{% endif %}"
+                aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ reassurance_items_count }}"
+                aria-controls="Slider-{{ block.id }}"
+              >
+                <span class="dot"></span>
+              </button>
+            {%- endfor -%}
           </div>
-        {% endif %}
-      {% endfor %}
-    </div>
+        </div>
+      {% endif %}
+    </slider-component>
   </div>
 </div>
 
@@ -176,7 +281,7 @@
       "id": "section_margin_top",
       "label": "Marge superieure",
       "min": 0,
-      "max": 100,
+      "max": 120,
       "step": 2,
       "unit": "px",
       "default": 58
@@ -186,7 +291,7 @@
       "id": "section_margin_bottom",
       "label": "Marge inferieure",
       "min": 0,
-      "max": 100,
+      "max": 120,
       "step": 2,
       "unit": "px",
       "default": 40

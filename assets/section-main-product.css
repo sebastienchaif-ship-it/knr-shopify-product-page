@@ -63,9 +63,13 @@ product-info {
   .product--right .product__media-wrapper {
     order: 2;
   }
+  .knr-hide-desktop {
+    display: none;
+  }
+
 }
 
-@media screen and (min-width: 990px) {
+@media screen and (min-width: 750px) {
   .knr-product-template .product--full:not(.product--no-media) .product__media-wrapper {
     max-width: 100%;
     width: 100%;
@@ -109,6 +113,13 @@ product-info {
   }
 }
 
+@media (min-width: 750px) and (max-width: 900px) {
+  .product--large:not(.product--no-media) .product__info-wrapper,
+  .product--full:not(.product--no-media) .product__info-wrapper {
+    max-width: 40.6rem;
+    width: 100%;
+  }
+}
 /* Dynamic checkout */
 
 .shopify-payment-button__button {
@@ -465,7 +476,26 @@ a.product__text {
   margin-bottom: 0;
 }
 
+.product .product__media-wrapper .product__media-list .slider.slider--mobile {
+  scroll-padding-left: 0;
+}
+
 @media screen and (max-width: 749px) {
+
+  .knr-product-template product-info product-component .page-width {
+    background: #e2dfd4;
+    padding-bottom: 2.4rem;
+  }
+
+  .product .product__media-wrapper .product__media-list.grid {
+    max-height: 58rem;
+  }
+
+  .knr-product-template .product__info-wrapper {
+    margin-top: -11.52rem;
+    background: #fff;
+    padding: 2.4rem 1.6rem;
+  }
   .product__media-list {
     margin-left: -2.5rem;
     margin-bottom: 3rem;
@@ -491,12 +521,61 @@ a.product__text {
   }
 
   .product__media-list .product__media-item {
-    width: calc(100% - 3rem - var(--grid-mobile-horizontal-spacing));
+    width: 100%;
+    min-width: 100%;
   }
 
   .product--mobile-columns .product__media-item {
     width: calc(50% - 1.5rem - var(--grid-mobile-horizontal-spacing));
   }
+
+  .product__title {
+    max-width: 23rem;
+  }
+
+  .product__title h1 {
+    font-size: 1.4rem;
+    line-height: 120%;
+    letter-spacing: -0.32px;
+  }
+
+  .product__info-container .price {
+    margin-top: 0;
+  }
+
+  .price--on-sale .price__sale {
+    gap: .1rem;
+  }
+
+  .product__info-container .product__description {
+    margin-bottom: 2.4rem;
+  }
+
+  .product-form__input {
+    margin-top: 2.4rem;
+  }
+
+  .product-form__input--pill {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100%;
+    border: none;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+  }
+
+  .product-form__input--pill label {
+    flex: 1 1 0; 
+    text-align: center;
+    min-width: 0;
+  }
+
+  .product__info-container .product-form {
+    margin-top: 2.4rem;
+  }
+
 }
 
 @media screen and (min-width: 750px) {
@@ -607,7 +686,7 @@ a.product__text {
   }
 }
 
-@media screen and (min-width: 990px) {
+@media screen and (min-width: 750px) {
   .product--stacked .product__media-item {
     width: 32.8%;
     max-width: 46.6rem;
@@ -1387,7 +1466,7 @@ a.product__text {
   --ratio-percent: calc(1 / var(--aspect-ratio) * 100%);
   position: relative;
   width: 100%;
-  max-width: calc(100% - calc(var(--media-border-width) * 2));
+  max-width: 100%;
 }
 
 .product-media-container.constrain-height {
@@ -1418,22 +1497,41 @@ a.product__text {
   padding-top: min(var(--constrained-height), var(--ratio-percent));
 }
 
+.knr-visible-mobile {
+  display:none;
+}
+
 @media screen and (max-width: 749px) {
   .product-media-container.media-fit-cover {
     display: flex;
     align-self: stretch;
+  }
+  
+  .product:not(.product--columns) .product__media-list .product__media-item:first-child .product-media-container .media {
+    padding-top: 55rem;
+  }
+
+  .product:not(.product--columns) .product__media-list .product__media-item:first-child .product-media-container .media img{
+    object-position: 22% 0;
   }
 
   .product-media-container.media-fit-cover .media {
     /* allow media img element to scale relative to modal-opener/product-media-container */
     position: initial;
   }
+
+    .knr-visible-mobile {
+      display:block;
+      position: absolute;
+      top: 8rem;
+      z-index: 9999;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
 }
 
 @media screen and (min-width: 750px) {
-  .product-media-container {
-    max-width: 100%;
-  }
 
   .product-media-container:not(.media-type-image) {
     /* override to use actual media ratio (not poster ratio) for video/models on desktop */

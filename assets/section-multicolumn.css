@@ -267,14 +267,15 @@
   font-size: 1.4rem;
   font-weight: 400;
   line-height: 1.4rem;
-  letter-spacing: 0.56px;
+  letter-spacing: -0.56px;
   text-transform: uppercase;
 }
 
 .multicolumn.knr-how-to-use .multicolumn-list h3 {
   font-size: 2.4rem;
   font-weight: 400;
-  letter-spacing: 0.48px;
+  letter-spacing: -0.48px;
+  line-height: 3.2rem;
   margin: 1.6rem 0;
 }
 

@@ -3,13 +3,45 @@
 
 {%- style -%}
   .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.67 | round: 0 }}px;
+  }
+
+  .section-{{ section.id }}-padding .multicolumn-slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .section-{{ section.id }}-padding .multicolumn-slider-dots .slider-counter__link {
+    padding: 0;
+    margin: 0;
+    line-height: 0;
+  }
+
+  .section-{{ section.id }}-padding .multicolumn-slider-dots .slider-counter__link .dot {
+    width: 25px;
+    height: 1px;
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    display: block;
+    background-color: #dcd5c3;
+  }
+
+  .section-{{ section.id }}-padding .multicolumn-slider-dots .slider-counter__link--active .dot {
+    background-color: #000000;
+  }
+
+  .section-{{ section.id }}-padding .multicolumn-slider-dots .slider-counter__link:not(.slider-counter__link--active):hover .dot {
+    background-color: #b9b09b;
   }
 
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
@@ -18,6 +50,10 @@
 {%- liquid
   assign columns_mobile_int = section.settings.columns_mobile | plus: 0
   assign show_mobile_slider = false
+  assign mobile_slider_dots = section.blocks.size | minus: columns_mobile_int | plus: 1
+  if mobile_slider_dots < 1
+    assign mobile_slider_dots = 1
+  endif
   if section.settings.swipe_on_mobile and section.blocks.size > columns_mobile_int
     assign show_mobile_slider = true
   endif
@@ -154,28 +190,21 @@
 
       {%- if show_mobile_slider -%}
         <div class="slider-buttons large-up-hide">
-          <button
-            type="button"
-            class="slider-button slider-button--prev"
-            name="previous"
-            aria-label="{{ 'general.slider.previous_slide' | t }}"
+          <div
+            class="slider-counter slider-counter--dots multicolumn-slider-dots"
+            role="group"
+            aria-label="{{ 'sections.slideshow.carousel' | t }}"
           >
-            <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
-          </button>
-          <div class="slider-counter caption">
-            <span class="slider-counter--current">1</span>
-            <span aria-hidden="true"> / </span>
-            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
-            <span class="slider-counter--total">{{ section.blocks.size }}</span>
+            {%- for i in (1..mobile_slider_dots) -%}
+              <button
+                class="slider-counter__link slider-counter__link--dots link{% if forloop.first %} slider-counter__link--active{% endif %}"
+                aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ mobile_slider_dots }}"
+                aria-controls="Slider-{{ section.id }}"
+              >
+                <span class="dot"></span>
+              </button>
+            {%- endfor -%}
           </div>
-          <button
-            type="button"
-            class="slider-button slider-button--next"
-            name="next"
-            aria-label="{{ 'general.slider.next_slide' | t }}"
-          >
-            <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
-          </button>
         </div>
       {%- endif -%}
     </slider-component>
